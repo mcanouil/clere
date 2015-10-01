@@ -17,25 +17,25 @@
   \tabular{ll}{
     Package: \tab clere\cr
     Title: \tab CLERE methodology for simultaneous variables clustering and regression\cr
-    Version: \tab 1.1\cr
-    Date: \tab 2014-02-15\cr
+    Version: \tab 1.1.1\cr
+    Date: \tab 2015-09-19\cr
     Author: \tab Loic Yengo <loic.yengo@gmail.com>\cr
-    Contributor: \tab Mickael Canouil\cr
+    Contributor: \tab Mickael Canouil <mickael.canouil@cnrs.fr>\cr
     Maintainer: \tab Loic Yengo <loic.yengo@gmail.com>\cr
     License: \tab GPL (>= 3)\cr
     Depends: \tab methods, parallel\cr
     Imports: \tab Rcpp\cr
-    Suggests: \tab grid, ggplot2\cr
     LinkingTo: \tab Rcpp, RcppEigen\cr
   }
-  The package implements mainly the \code{\link{fit.clere}} function (an example is given below) for fitting the model from a matrix of covariates and a vector of response. The package also implements a \code{\link{summary}} method and graphical summary \code{\link{plot}} (or \code{\link{ggPlot}}) which represents the course of each parameters at each step of the SEM-Gibbs and a \code{\link{predict}} method for making prediction from a new design matrix. 
+  The package implements mainly the \code{\link{fitClere}} function (an example is given below) for fitting the model from a matrix of covariates and a vector of response. The package also implements a \code{\link{summary}} method and graphical summary \code{\link{plot}} which represents the course of each parameters at each step of the SEM-Gibbs and a \code{\link{predict}} method for making prediction from a new design matrix. 
 }
 
 \seealso{
   Overview : \code{\link{clere-package}} \cr
   Classes : \code{\linkS4class{Clere}} \cr
-  Methods :  \code{\link{show}}, \code{\link{plot}}, \code{\link{ggPlot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr
-  Functions : \code{\link{fit.clere}}
+  Methods :  \code{\link{show}}, \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr
+  Functions : \code{\link{fitClere}}
+  Datasets  : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}
 }
 
 \author{Loic Yengo \email{loic.yengo@gmail.com}}
@@ -50,15 +50,14 @@
 \keyword{package}
 
 \examples{ 
-# Simple example using simulated data
-# to see how to you the main function clere
-# library(clere)
-x     <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
-y     <- rnorm(50)
-model <- fit.clere(y = y, x = x, g = 2, plotit = FALSE)
-plot(model) 
-# ggPlot(model)
-clus <- clusters(model, threshold = NULL)
-predict(model, newx = x+1)
-summary(model)
+ # Simple example using simulated data
+ # to see how to you the main function clere
+ # library(clere)
+ x     <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
+ y     <- rnorm(50)
+ model <- fitClere(y = y, x = x, g = 2, plotit = FALSE)
+ plot(model) 
+ clus <- clusters(model, threshold = NULL)
+ predict(model, newx = x+1)
+ summary(model)
 }

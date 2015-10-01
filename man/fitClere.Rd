@@ -1,15 +1,15 @@
-\name{fit.clere}
+\name{fitClere}
 
-\alias{fit.clere}
+\alias{fitClere}
 
-\title{fit.clere function}
+\title{fitClere function}
 
 \description{
-This function runs the CLERE Model. It returns an object of class \code{\linkS4class{Clere}}. For more details please refer to \code{\link{clere}}.
+  This function runs the CLERE Model. It returns an object of class \code{\linkS4class{Clere}}. For more details please refer to \code{\link{clere}}.
 }
 
 \usage{
-    fit.clere(y = rnorm(10), x = matrix(rnorm(50), nrow = 10), 
+    fitClere(y = rnorm(10), x = matrix(rnorm(50), nrow = 10), 
               g = 1, nItMC = 50, nItEM = 1000, nBurn = 200, 
               dp = 5, nsamp = 200, maxit = 500, tol = 0.001,
               nstart=2, parallel = FALSE,seed = NULL, plotit = FALSE, sparse = FALSE, 
@@ -39,19 +39,19 @@ This function runs the CLERE Model. It returns an object of class \code{\linkS4c
 }
 
 \value{
-Object of class \code{\linkS4class{Clere}.}
+  Object of class \code{\linkS4class{Clere}.}
 }
 
 \seealso{
-Overview : \code{\link{clere-package}} \cr
-Classes : \code{\linkS4class{Clere}} \cr
-Methods :  \code{\link{show}}, \code{\link{plot}}, \code{\link{ggPlot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr
-Functions : \code{\link{fit.clere}}
+  Overview : \code{\link{clere-package}} \cr
+  Classes : \code{\linkS4class{Clere}} \cr
+  Methods :  \code{\link{show}}, \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr
+  Functions : \code{\link{fitClere}} \code{\link{fitPacs}}
 }
 
 \author{Loic Yengo \email{loic.yengo@gmail.com}}
 
-\keyword{fit.clere}
+\keyword{fitClere}
 \keyword{Clere}
 \keyword{clere}
 \keyword{function}
@@ -107,7 +107,7 @@ gmax <- 7
 eps  <- rnorm(n, mean = 0, sd = sigma)
 X    <- matrix(rnorm(n*p), nrow = n, ncol = p)
 Y    <- as.numeric(intercept+X\%*\%Beta+eps)
-tt   <- system.time(mod <- fit.clere(y = Y, x = X, g = gmax, 
+tt   <- system.time(mod <- fitClere(y = Y, x = X, g = gmax, 
                         analysis = analysis,algorithm = algorithm,
                         plotit = plotit, 
                         sparse = FALSE,nItEM = nItEM, 

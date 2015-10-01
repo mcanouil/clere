@@ -1,6 +1,7 @@
 #include "Model.h"
+#include "Rmath.h"
 double static runif(){
-  double r = ((double) rand())/((double) RAND_MAX);
+  double r = R::runif(0,1); //((double) rand())/((double) RAND_MAX);
   return r; 
 };
 
@@ -173,17 +174,17 @@ double static EM (MatrixXd &xz,VectorXd &y, VectorXd &v, VectorXd &e,
   lold = 0.0;
   
   // For binomial only
-//   VectorXd L1   = VectorXd::Zero(g);
-//   VectorXd L2   = VectorXd::Zero(g);
-//   VectorXd D_L1 = VectorXd::Zero(g);
-//   VectorXd D_L2 = VectorXd::Zero(g);
+  //   VectorXd L1   = VectorXd::Zero(g);
+  //   VectorXd L2   = VectorXd::Zero(g);
+  //   VectorXd D_L1 = VectorXd::Zero(g);
+  //   VectorXd D_L2 = VectorXd::Zero(g);
   
-//   L1(0) = 1.0; // For intercept
-//   L2(1) = 1.0; // For sparse
-//   Matrix2d A;
-//   Vector2d a;
-//   Vector2d lambda;
-//   double aa;
+  //   L1(0) = 1.0; // For intercept
+  //   L2(1) = 1.0; // For sparse
+  //   Matrix2d A;
+  //   Vector2d a;
+  //   Vector2d lambda;
+  //   double aa;
   
   while(it<maxit and eps>tol){
     e  = y-xz*t;
@@ -416,6 +417,7 @@ void Model::updateZ_GibbsRows(IO *io, MatrixXd &xz, VectorXd &e,
   int n = io->n;
   int i,j,k;
   int oj,og,ng,kmin;
+  kmin=0;
   double bk_old,bk_new,exj,nxj,norm;
   double lpmax = 0.0;
   og = 0;

@@ -37,12 +37,12 @@
 
 RcppExport SEXP clere(SEXP R_IOobj){  
   BEGIN_RCPP  
-  Rcpp::S4 obj(R_IOobj);
+    Rcpp::S4 obj(R_IOobj);
   IO io = IO(obj);
   // Set random number generator
-  int seed = io.seed;
-  std::srand(seed);
-
+  // int seed = io.seed;
+  // std::srand(seed);
+  
   if(io.instantiated!=0){
     if(io.analysis=="fit"){
       Fit Analysis = Fit(&io);

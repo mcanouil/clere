@@ -1,0 +1,874 @@
+%\VignetteIndexEntry{R packages: LaTeX vignettes}
+%\VignetteKeyword{R package, vignette, LaTeX}
+%\VignetteEngine{R.rsp::tex}
+\documentclass[a4paper, french, 12 pt]{article}
+\usepackage{float}
+\usepackage{t1enc}
+\usepackage[dvips]{color}
+\usepackage[latin1]{inputenc}
+\usepackage{lscape}
+\usepackage{amssymb}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{rotating}      
+\usepackage{color}      
+\usepackage{bm}
+\usepackage{amssymb,amsmath}
+\usepackage{booktabs}
+
+\setcounter{MaxMatrixCols}{10}
+
+\setlength{\parindent}{0in}
+\setlength{\textwidth}{16cm}
+\setlength{\textheight}{22cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+
+\newcommand{\X}{\mathbb{X}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rd}{\mathbb{R}^d}
+\newcommand{\Xd}{\mathbb{X}^d}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\trace}{\mathop{\mathrm{Tr}}}
+\newcommand{\diag}{\mathop{\mathrm{diag}}}
+\newcommand{\II}{1 \! \! 1}
+\newcommand{\IR}{\mathbb{R}}
+\newcommand{\IZ}{\mathbb{Z}}
+\newcommand{\IN}{\mathbb{N}}
+\newcommand{\IE}{\mathbb{E}}
+\newcommand{\mat}[4]{\begin{array}{cc}#1 & #2 \\#3 & #4 \end{array}}
+\newcommand{\matb}[4]{\begin{array}{cc}{\bf #1} & {\bf #2} \\{\bf #3} & {\bf #4} \end{array}}
+\newcommand{\med}{\mathrm{med}}
+\newcommand{\tr}{\mbox{trace}}
+\newcommand{\tra}[1]{\mbox{tr}{\bf #1}}
+\newcommand{\ba}{\mathbf{a}}
+\newcommand{\bc}{\mathbf{c}}
+\newcommand{\bg}{\mathbf{g}}
+\newcommand{\be}{\mathbf{e}}
+\newcommand{\bp}{\mathbf{p}}
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand{\bZ}{\mathbf{Z}}
+\newcommand{\bz}{\mathbf{z}}
+\newcommand{\bt}{\mathbf{t}}
+\newcommand{\by}{\mathbf{y}}
+\newcommand{\x}{x}
+\newcommand{\mx}{x}
+\newcommand{\muu}{u}
+\newcommand{\mv}{v}
+\newcommand{\my}{y}
+\newcommand{\mz}{z}
+\newcommand{\z}{z}
+\newcommand{\y}{y}
+\newcommand{\Y}{Y}
+\newcommand{\Z}{Z}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+\newcommand{\bDelta}{\boldsymbol{\Delta}}
+\newcommand{\bepsilon}{\boldsymbol{\epsilon}}
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\blambda}{\boldsymbol{\lambda}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bpi}{\boldsymbol{\pi}}
+\newcommand{\bphi}{\boldsymbol{\phi}}
+\newcommand{\brho}{\boldsymbol{\rho}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bTheta}{\boldsymbol{\Theta}}
+\newcommand{\bvarepsilon}{\boldsymbol{\varepsilon}}
+\newtheorem{defn}{Definition}[section]
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{Remark}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newcommand{\demi}{\mbox{$\frac{1}{2}$}}
+\newcommand{\address}[1]{\addvspace{\baselineskip}\noindent\emph{#1}}
+\newcommand{\email}[1]{\href{mailto:#1}{\normalfont\texttt{#1}}}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+
+\begin{document}
+
+\title{Variable Clustering in
+        High-Dimensional Linear Regression: The \textbf{R} Package \textbf{clere}}
+\author{by Loic Yengo, Julien Jacques, Mickael Canouil and Christophe Biernacki}
+
+\maketitle
+
+\abstract{
+Dimension reduction is one of the biggest challenge in high-dimensional regression models. We recently introduced
+a new methodology based on variable clustering as a means to reduce dimensionality. We present here an R package that
+implements this methodology. An overview of the package
+functionalities as well as examples to run an analysis are
+described. Numerical experiments on real data were performed to
+illustrate the good predictive performance of our method compared to
+standard dimension reduction approaches.
+}
+
+\section[Introduction]{Introduction}
+
+High dimensionality is increasingly ubiquitous in numerous scientific fields including genetics, economics and physics. Reducing the dimensionality is a challenge that most statistical methodologies must meet not only to remain interpretable but also to achieve reliable predictions. In linear regression models, dimension reduction techniques often refer to variable selection. Approaches for variable selection are implemented in publicly available software, that involve the well-known \textbf{R} packages \textbf{glmnet} [\cite{glmnet-ref}] and \textbf{spikeslab} [\cite{spikeslab-ref}]. The \textbf{R} package \textbf{glmnet} implements the Elastic net methodology [\cite{zou2005}], which is a generalization of both the LASSO [\cite{tibshirani1996}] and the ridge regression (RR) [\cite{hoerl1970}]. The \textbf{R} package \textbf{spikeslab} in turn, implements the Spike and Slab methodology [\cite{ishwaran2005}], which is a Bayesian approach for variable selection.
+
+Dimension reduction can not however be restricted to variable selection. Indeed, the field can be extended to include approaches which aim is to create surrogate covariates that summarize the information carried in initial covariates. Since the emblematic Principal Component Regression (PCR) [\cite{joliffe82}], many of the other methods spread in the recent literature. As specific examples, we may refer to the OSCAR methodology [\cite{bondell2008}], or the PACS methodology [\cite{pacs2013}] which is a generalization of the latter approach. Those methods mainly proposed variables clustering within a regression model as a way to reduce the dimensionality. Despite their theoretical and practical appeal, implementations of those methods were often proposed only through \textbf{Matlab} or \textbf{R} scripts, limiting thus the flexibility and the computational efficiency of their use. The CLusterwise Effect REgression (CLERE) methodology [\cite{yengo2013}], was recently introduced as a novel methodology for simultaneous variables clustering and regression. The CLERE methodology is based on the assumption that each regression coefficient is an unobserved random variable sampled from a mixture of Gaussian distributions with an arbitrary number $g$ of components. In addition, all components in the mixture are assumed to have different means ($b_1,\ldots,b_g$) and equal variances $\gamma^2$.
+
+In this paper, we present the \textbf{R} package \textbf{clere} which implements the CLERE methodology. The core of the package is a \textbf{C++} program interfaced with \textbf{R} using \textbf{R} packages \textbf{Rcpp} [\cite{Rcpp-ref}] and \textbf{RcppEigen} [\cite{RcppEigen-ref}]. The \textbf{R} package \textbf{clere} can be downloaded from the Comprehensive \textbf{R} Archive Network (CRAN) at $http://cran.r-project.org/web/packages/clere/$.
+
+The outline of the present paper is the following. In the following section the definition of the model is recalled and the strategy to estimate the model parameter is presented. Afterwards, the main functionalities of the \textbf{R} package \textbf{clere} are presented. Real data analyses are then presented, aiming at illustrating the good predictive performances of CLERE compared to standard dimension reduction methods. Finally, perspectives and further potential improvements of the package are discussed in the last Section.
+
+\section[Model definition and notation]{Model definition and notation}
+\label{sec:modeldescription}
+Our model is defined by the following hierarchical relationships: 
+  \begin{equation}
+    \label{eq:clere0}
+    \left\{
+    \begin{array}{l}
+      y_i \sim\mathcal{N}\left(\beta_0+\sum_{j=1}^{p}{\beta_j x_{ij}},\sigma^2\right)\\
+      \beta_j |\mathbf{z}_j  \sim \mathcal{N}\left(\sum^{g}_{k=1}{ b_k z_{jk} },\gamma^2  \right)\\
+      \mathbf{z}_j = \left(z_{j1},\ldots,z_{jg} \right)\sim \mathcal{M}\left(1,\pi_1,\ldots,\pi_g\right)\text{,}
+    \end{array}
+    \right.
+  \end{equation}
+  {where $\mathcal{N}$ is the normal distribution and $\mathcal{M}\left(1,\pi_1,\ldots,\pi_g\right)$ the one-order multinomial distribution.}
+  For an individual $i=1,\ldots,n$, $y_i$ is the response and $x_{ij}$ is an observed value for the $j$-th covariate. $\beta_j$ is the regression
+  coefficient associated with the $j$-th covariate ($j=1,\ldots,p$),  {which is assumed to follow a mixture of $g$ Gaussians. The variable $\mathbf{z}_j$ indicates from which mixture component $\beta_j$ is drawn ($z_{jk}=1$ if $\beta_j$ comes from component $k$ of the mixture, $z_{jk}=0$ otherwise).}
+  Let's note that model (\ref{eq:clere0}) can be considered as a variable selection-like model by constraining the model parameter $b_1$ to be equal to 0. 
+  {Indeed, assuming that one of the component is centered in zero means that a cluster of regression coefficients have null expectation, and thus that the corresponding variables are not significant for explaining the response variable.}
+  This functionality is available in the package.\\
+  Let $\bm \beta  = \left(\beta_1,\ldots,\beta_p  \right)$, $\bm y = (y_1,\ldots ,y_n)'$, $\mathbf{X} = (x_{ij})$,
+  $\bm Z = (z_{jk})$, $\bm b = (b_1\ldots b_g)'$ and $\bm \pi=
+  (\pi_1,\ldots,  \pi_g)'$.
+  Moreover, $\log p(\bm y|\bm X;\bm \theta)$ denotes the log-likelihood of model (\ref{eq:clere0}) assessed for
+  the parameter  $\bm \theta = \left(\beta_0,\bm b,\bm\pi,\sigma^2,\gamma^2\right)$. 
+  Model (\ref{eq:clere0}) can be interpreted as a Bayesian approach. However, to be fully Bayesian a prior
+  distribution for parameter $\bm \theta$ would have been
+  necessary. Instead, we proposed to estimate $\bm \theta$ by maximizing the (marginal)
+  log-likelihood, $\log p(\mathbf{y}|\mathbf{X};\bm \theta)$. This partially Bayesian approach is referred to as \textit{Empirical
+  Bayes} (EB) [\cite{casella1985}]. Let $\mathcal{Z}$ be the set of $p\times g$-matrices partitioning $p$ covariates into $g$ groups. Those matrices are defined as
+  \[
+  \bm Z = \left(z_{jk}\right)_{1\leq j \leq p, 1\leq k \leq g} \in
+  \mathcal{Z} \Leftrightarrow \forall j=1,\ldots,p\text{ }
+  \begin{cases}
+    \exists!\text{ } k\text{ such as }z_{jk} = 1\\
+    \text{if }k'\neq k\text{ then }z_{jk}=0.
+  \end{cases}
+  \] 
+  The log-likelihood  $\log p(\bm y|\bm X;\bm \theta)$ is defined as
+\begin{equation*}   
+  \label{eq:likelihood}
+  \log
+  p(\bm y|\bm X;\bm \theta)
+  = \log\left[ \sum_{\bm Z\in\mathcal{Z}} {\int_{\mathbb{R}^p}{p(\bm
+	y,\bm \beta,\bm Z|\bm X;\bm \theta)}\mathrm{d}\bm \beta }\right]\text{.}
+  \end{equation*}
+Since it requires integrating over $\mathcal{Z}$ with cardinality $g^p$, evaluating the likelihood becomes rapidly
+computationally unaffordable.
+
+Nonetheless, maximum likelihood estimation is still achievable using the
+expectation maximization (EM) algorithm [\cite{dempster1977}]. The
+latter algorithm is an iterative method which starts with an initial
+estimate of the parameter and updates this estimate until
+convergence. Each iteration of the algorithm consists of two steps,
+denoted as the \textit{E} and the \textit{M} steps. At each iteration
+$d$ of the algorithm, the \textit{E  step} consists in calculating the
+expectation of the log-likelihood of the complete data (observed +
+unobserved) with respect to $p(\bm \beta,\bm Z|\bm y,\bm X;\bm
+\theta^{(d)})$, the conditional distribution of the
+unobserved data given the observed data, 
+and the value of the parameter at the current
+iteration, $\bm \theta^{(d)}$. This expectation, often denoted as $Q(\bm \theta|\bm \theta^{(d)})$
+is then maximized with respect to $\bm \theta$ at the \textit{M step}.  
+
+In model (\ref{eq:clere0}), the \textit{E  step} is analytically
+intractable. A broad literature devoted to intractable \textit{E  steps}
+recommends the use of a stochastic approximation of $Q(\bm \theta|\bm \theta^{(d)})$ 
+through Monte Carlo (MC) simulations [\cite{wei1990}, \cite{levine2001}]. This
+approach is referred to as the MCEM algorithm. Besides, mean-field-type
+approximations are also proposed [\cite{govaert2008}, \cite{mariadassou2010}]. Despite their
+computational appeal, the latter approximations do not generally ensure
+convergence to the maximum likelihood
+[\cite{Gunawardana05convergencetheorems}]. Alternatively, the
+SEM algorithm [\cite{celeux:inria-00074164}] was introduced as a
+stochastic version of the EM algorithm. In this algorithm, the
+\textit{E  step} is replaced with a simulation step (\textit{S  step}) that consists in
+generating a complete sample by simulating the unobserved data using
+$p(\bm \beta,\bm Z|\bm y,\bm X;\bm \theta^{(d)})$ providing thus a sample $(\bm \beta^{(d)},\bm Z^{(d)})$. 
+Note that the Monte Carlo algorithm we use is the Gibbs sampler. After the
+\textit{S  step} follows the \textit{M step} which consists in maximizing $p(\bm \beta^{(d)},\bm Z^{(d)}|\bm y,\bm X;\bm \theta)$ with respect to $\bm \theta$. Alternating those two steps generate a sequence $\left(\bm \theta^{(d)}\right)$, which is a Markov chain whose stationary distribution (when it exists) concentrates around a local maximum of the likelihood.
+
+
+
+
+%A comparison of both algorithms has been carried out in \cite{Yengo2014}. As long as $p>n$, it has been shown that the SEM algorithm has a lower complexity than the MCEM algorithm because a closed form of $p(\bm y,\bm Z|\bm X;\bm \theta)$ is available. However, the computational time to run our SEM algorithm is more variable compared to MCEM as its \text{M step} does no longer have a closed form: an internal EM algorithm is thus required. The use of the MCEM algorithm is thus advocate only when $p<n$. 
+%
+%Once the MLE $\widehat{\bm \theta}$ is calculated (using one or the other
+%  algorithm), the maximum log-likelihood and the conditional clustering matrix $\mathbb{E}\left[\bm Z|\bm{y, X};\widehat{\bm \theta} \right]$ are  approximated using specific MC simulations (a Gibbs sampler again). The subsequent approximated maximum log-likelihood $\widehat{l}$ is then utilized to calculate AIC [\cite{akaike1974}] and BIC [\cite{schwarz1978}] criteria for selecting the number $g$ of components of the mixture model of the regression coefficients. In model (\ref{eq:clere0}), those criteria can be written as
+%  \begin{equation}
+%    \text{BIC} = -2\widehat{l} + 2(g+1)\log (n)\text{ and }\text{AIC} = -2\widehat{l} + 4(g+1)\text{.}
+%  \end{equation}
+% An additional criterion for model selection, namely the ICL criterion [\cite{biernacki2000}] is also implemented in the \textbf{R} package \textbf{clere}. The latter criterion can be written
+%  \begin{equation}
+%    \text{ICL} = -2\widehat{l} + 2(g+1)\log (n) + E\text{,}
+%  \end{equation}
+%  where $\pi_{jk} = \mathbb{E}\left[z_{jk}|\bm{y, X};\widehat{\bm \theta} \right]$ and $E=-\sum^{p}_{j=1}{\sum^{g}_{k=1}{\pi_{jk} \log ( \pi_{jk} ) }}$ is the estimated entropy.\\
+%Note finally that the estimation of the model for different number of clusters can easily be parallelized (this option is available in the package).
+
+
+
+
+\section{ { Estimation and model selection}}
+\label{sec:algos}
+\subsection{ { Initialization} }
+ { 
+  The two algorithms presented in this section are initialized using a primary estimate ${\beta_j}^{(0)}$ of each
+  $\beta_j$. The latter can be chosen either at random, or obtained from univariate regression
+  coefficients or penalized approaches like LASSO and ridge regression. For large SEM or MCEM chains, initialization is not a critical issue. The choice of the initialization strategy is therefore made to speed up the convergence of the chains. A Gaussian mixture model with $g$ component(s) is then fitted using ${\bm \beta}^{(0)} = \left(\beta_1^{(0)},\ldots,{\beta}^{(0)}_p\right)$ as observed data to produce starting values $\mathbf{b}^{(0)}$, $\bm \pi^{(0)}$ and ${\gamma^2}^{(0)}$ respectively for parameters $\mathbf{b}$, $\boldsymbol{\pi}$ and
+  ${\gamma^2}$. Using maximum a posteriori (MAP) clustering, an initial partition $\mathbf{Z}^{(0)} =  \left(z^{(0)}_{jk}\right)\in\mathcal{Z}$ is obtained as
+  \[
+  \forall j\in\{1,\ldots,p\},\text{ }z^{(0)}_{jk} = \begin{cases}
+    1 & \text{ if }k = \argmin_{k'\in\{1,\ldots,g\}}{\left({\beta_j}^{(0)}-b^{(0)}_{k'}\right)^2}\\
+    0 & \text{otherwise.}
+  \end{cases}
+  \]
+  $\beta_0$ and $\sigma^2$ are initialized using ${\bm \beta}^{(0)}$ as follows:
+  \small
+  $$ \beta_0^{(0)}  =
+  \frac{1}{n}\sum^{n}_{i=1}{\left(y_i-\sum^{p}_{j=1}{\beta^{(0)}_j x_{ij}}\right)}
+  \text{ and }
+  {\sigma^2}^{(0)}  =
+  \frac{1}{n}\sum^{n}_{i=1}{\left(y_i-\beta_0^{(0)}
+  -\sum^{p}_{j=1}{\beta^{(0)}_j x_{ij}}\right)^2} .$$
+  \normalsize
+}
+\subsection{ { MCEM algorithm}}
+\label{sec:mcem}
+\subsubsection{ { The Sochastic Approximation of the E step}}
+ { 
+  Suppose at iteration $d$ of the algorithm that we have
+  $\left\{\left(\bm \beta^{(1,d)},\bm Z^{(1,d)}\right),\ldots,
+  \left(\bm \beta^{(M,d)},\bm Z^{(M,d)}\right)\right\}$, $M$ samples
+  from $p\left(\bm \beta,\bm Z|\bm y,\bm X;\bm  \theta^{(d)}\right)$.
+  Then the MC approximation of the \textit{E}-step can
+  be written 
+  \begin{equation*}
+    \label{eq:approxEstep}
+    Q\left(\bm \theta|\bm \theta^{(d)}\right) = \mathbb{E}\left[\log p(\mathbf{y},\bm \beta,\mathbf{Z}|\mathbf{X};\bm \theta^{(d)}) |\mathbf{y},\mathbf{X};\bm \theta^{(d)}\right] \approx \frac{1}{M}\sum^{M}_{m=1}{\log p(\mathbf{y},\bm \beta^{(m,d)},\mathbf{Z}^{(m,d)}|\mathbf{X};\bm \theta^{(d)})}\text{.}
+  \end{equation*}  
+  However, sampling from $p\left(\bm \beta,\bm Z|\bm y,\bm X;\bm
+  \theta^{(d)}\right)$ is not straightforward. However, we can use a
+  Gibbs sampling scheme to simulate unobserved data, taking advantage
+  of $p\left(\bm \beta|\bm Z,\bm y,\bm X;\bm \theta^{(d)}\right)$ and
+  $p\left(\bm Z|\bm \beta,\bm y,\bm X;\bm \theta^{(d)}\right)$ from
+  which it is easy to simulate. Those
+  distributions, respectively Gaussian and multinomial, are described below in Equations (\ref{eq:gibbs1}) and (\ref{eq:gibbs2}).
+  \begin{equation}
+    \label{eq:gibbs1}
+    \left\{
+    \begin{array}{l}
+      \bm \beta|\bm{Z,y,X};\bm \theta^{(d)} \sim \mathcal{N}\left(\bm \mu^{(d)},\bm \Sigma^{(d)} \right)\\
+      \bm \mu^{(d)} = \left[ \bm{X'X} +
+      \frac{{\sigma^2}^{(d)}}{{\gamma^2}^{(d)}}\text{I}_{p} \right]^{-1}\bm{X}'\left(\mathbf{y}-\beta^{(d)}_0\bm 1_p\right) +
+      \frac{{\sigma^2}^{(d)}}{{\gamma^2}^{(d)}}\left[ \bm{X'X} +  \frac{{\sigma^2}^{(d)}}{{\gamma^2}^{(d)}}\text{I}_{p} \right]^{-1}\bm{Zb}^{(d)}\\
+      \bm \Sigma^{(d)} = {\sigma^2}^{(d)}\left[ \bm{X'X} + \frac{{\sigma^2}^{(d)}}{{\gamma^2}^{(d)}}\text{I}_{p} \right]^{-1}
+    \end{array}
+    \right.
+  \end{equation}
+  and (note that $p\left(\bm Z|\bm \beta,\bm y,\bm X;\bm \theta^{(d)}\right)$ does not depend on $\bm{X}$ nor $\bm{y}$)
+  \begin{equation}
+    \label{eq:gibbs2}
+    p\left(z_{jk}=1|\bm \beta; \bm \theta^{(d)}\right) \propto \pi^{(d)}_k\exp\left(-\frac{\left(\beta_j - b^{(d)}_k\right)^2}{2{\gamma^2}^{(d)}} \right).
+  \end{equation}
+  In Equation (\ref{eq:gibbs1}), $\text{I}_{p}$ and $\bm 1_p$ respectively stands for the identity matrix in dimension $p$ and the vector of $\mathbb{R}^p$ which all coordinates equal 1. To efficiently sample from $p\left(\bm \beta|\bm Z,\bm y,\bm X;\bm \theta^{(d)}\right)$ a preliminary singular vector decomposition of matrix $\bm X$ is necesary. Once   this decomposition is performed the overall complexity of the approximated \textit{E step} is $\mathcal{O}\left[M(p^2+pg)\right]$.
+}
+ \subsubsection{The M step}
+ Using the $M$ draws obtained by Gibbs sampling at iteration $d$, the
+ \textit{M step} is straightforward as detailed in Equations (\ref{eq:mstep_pi}) to (\ref{eq:mstep_sigma}). The overall computational complexity of that
+ step is  $\mathcal{O}\left( Mpg\right)$.
+ \begin{equation}
+   \label{eq:mstep_pi}
+   \pi^{(d+1)}_k = \frac{1}{Mp}\sum^{M}_{m=1}{  \sum^{p}_{j=1}{z^{(m,d)}_{jk} } }\text{,}
+ \end{equation}  
+ \begin{equation}
+   \label{eq:mstep_b}
+   b^{(d+1)}_k = \frac{1}{Mp\pi^{(d+1)}_k}\sum^{M}_{m=1}{\sum^{p}_{j=1}{ z^{(m,d)}_{jk} \beta_{j}^{(m,d)} } }\text{,}
+ \end{equation}
+ \begin{equation}
+   \label{eq:mstep_gamma}
+	 {\gamma^2}^{(d+1)} =
+	 \frac{1}{Mp}\sum^{M}_{m=1}{\sum^{p}_{j=1}{  \sum^{g}_{k=1}{z^{(m,d)}_{jk}    \left(\beta_{j}^{(m,d)}-b^{(d+1)}_k\right)^2} } }\text{,}
+ \end{equation}
+ \begin{equation}
+   \label{eq:mstep_beta0}
+   \beta^{(d+1)}_0 = \frac{1}{n}\sum^{n}_{i=1}{ \left[y_i-\sum^{p}_{j=1}{\left(\frac{1}{M}\sum^{M}_{m=1}{\beta^{(m,d)}_j} \right)x_{ij}} \right]}\text{,}
+ \end{equation}  
+ \begin{equation}
+   \label{eq:mstep_sigma}
+	 {\sigma^2}^{(d+1)} = \frac{1}{nM}\sum^{M}_{m=1}{\sum^{n}_{i=1}{ \left(y_i - \beta^{(d+1)}_0-\sum^{p}_{j=1}{ \beta^{(m,d)}_j x_{ij} }\right)^2  } }\text{.}
+ \end{equation}
+ 
+ \subsection{ { SEM algorithm}}
+ { In most situations, the SEM algorithm can be considered as a special case
+   of the MCEM algorithm [\cite{celeux:inria-00074164}], obtained by setting
+   $M=1$. In model (\ref{eq:clere0}), such a direct derivation leads to an algorithm which computational complexity remains quadratic with respect to $p$. To reduce that complexity, we propose a SEM algorithm based on the integrated complete data likelihood $p(\bm y, \bm Z|\bm X;\bm \theta)$ rather than $p(\bm y,\bm \beta,\bm Z|\bm X;\bm \theta)$.  A closed form of $p(\bm y, \bm Z|\bm X;\bm \theta)$ is available and given subsequently.
+ }
+ 
+  \subsubsection{ { Closed form of the integrated complete data likelihood}}
+     { Let the SVD decomposition of matrix $\bm X$ be $\bm {USV'}$, where
+    $\bm U$ and $\bm V$ are respectively $n \times n$ and 
+    $p \times p$ orthogonal matrices, and $\bm S$ is $n \times p$
+    rectangular diagonal matrix which diagonal terms are the eigenvalues $\left(\lambda^2_1,\ldots,\lambda^2_n\right)$
+    of matrix $\bm {XX}'$. We now define $\bm X^u = \bm {U'X}$
+    and $\bm y^u = \bm {U'y}$. Let $\bm M$ be the $n\times (g+1)$ matrix
+    which first column is made  of 1's and which additional columns are
+    those of matrix $\bm X^u \bm Z$.
+    Let also $\bm t=\left(\beta_0,\bm b\right)\in \mathbb{R}^{(g+1)}$ and $\bm R$ be a $n\times n$ diagonal matrix which $i$-th diagonal term equal
+    $\sigma^2 + \gamma^2\lambda^2_i$. With these notations
+    we can express the complete data likelihood integrated over $\bm
+    \beta$ as 
+    \begin{align} 
+      \label{eq:ICDLL}
+      \log p\left(\bm{y,Z}|\bm{X};\bm \theta\right)  &= -\frac{n}{2}\log\left( 2\pi\right)-\frac{1}{2}\sum^{n}_{i=1}{\log\left( \sigma^2 + \gamma^2\lambda^2_i\right)}-\frac{1}{2}\left(\bm{y}^u-\bm {Mt}\right)'\bm R^{-1}\left(\bm{y}^u-\bm {Mt}\right) \nonumber\\
+       & + \sum^{p}_{j=1}{\sum^{g}_{k=1}{z_{jk}\log \pi_k}}\text{.}
+    \end{align}}
+
+
+ \subsubsection{ { Simulation step}}
+     { To sample from $p\left(\bm{Z}|\bm{y,X};\bm \theta\right)$ we use a
+    Gibbs sampling strategy based on the conditional distributions
+    $p\left(\bm{z}_j|\bm y,\bm Z^{-j}, \bm X;\bm \theta\right)$, $\bm
+    Z^{-j}$ denoting the set of cluster membership indicators for all
+    covariates but the $j$-th. Let $\bm w^{-j} =
+    \left(w^{-j}_1,\ldots,w^{-j}_n\right)'$, where $w_i^{-j} =
+    y^u_i-\beta_0 - \sum_{l\neq j}{\sum^{g}_{k=1}{z_{lk} x^u_{il}
+	b_k}}$. The conditional distribution  $p(z_{jk} =
+    1|\bm{Z}^{-j},\bm{y},\bm{X};\bm \theta)$ can be written
+    \begin{equation}
+      \label{eq:Gibbs}
+      p(z_{jk} = 1|\bm{Z}^{-j},\bm{y},\bm{X};\bm \theta) \propto
+      \pi_k\exp\left[-\frac{b^2_k}{2} \left(\bm{x}^{u}_j\right)'\bm{R}^{-1} \bm{x}^{u}_j+b_k \left(\bm{w}^{-j}\right)'\bm{R}^{-1}\bm x^{u}_j\right]\text{,}
+    \end{equation}
+    where $\bm{x}^{u}_j$ is the $j$-th column of $\bm X^u$. In the classical
+    SEM algorithm, convergence to $p\left(\bm{Z}|\bm{y,X};\bm
+    \theta\right)$ should be reached before updating $\bm
+    \theta$. However, a valid inference can still be ensured in settings when $\bm \theta$ is updated only after
+    one or few Gibbs iterations. These approaches are referred to as SEM-Gibbs
+    algorithm [\cite{biernacki2013}]. The overall computational complexity of the
+    simulation step is $\mathcal{O}\left( npg\right)$, so linear with $p$ and no quadratic as obtained previously with MCEM.\\
+    To improve the mixing of the generated Markov chain, we start the
+    simulation step at each iteration by creating a random permutation of 
+    $\left\{1,\ldots,p\right\}$. Then, according to the order defined by
+    that permutation, we update each $z_{jk}$ using $p(z_{jk} =
+    1|\bm{Z}^{-j},\bm{y},\bm{X};\bm \theta)$.
+  \subsubsection{Maximization step}
+    $\log p\left(\bm{y,Z}|\bm{X};\bm \theta\right)$ corresponds to the
+    marginal log-likelihood of a linear mixed model
+    [\cite{searle1992variance}] which can be written 
+    \begin{equation}
+      \label{mixedmodel0}
+      \bm{y}^u = \bm M \bm t + \bm {\lambda v} + \bm \varepsilon
+    \end{equation}
+    where $\bm v$ is an unobserved random vector such as $\bm v \sim
+    \mathcal{N}\left(0,\gamma^2\text{I}_{n}\right)$, $\bm \varepsilon \sim
+    \mathcal{N}\left(0,\sigma^2\text{I}_{n}\right)$ and $\bm \lambda =
+    \text{diag}\left(\lambda_1,\ldots,\lambda_n\right)$. The estimation of
+    the parameters of model (\ref{mixedmodel0}) can be performed using the
+    EM algorithm, as in [\cite{searle1992variance}]. We adapt below the EM equations defined
+    in [\cite{searle1992variance}], using our notations.
+    At iteration $s$ of the internal EM algorithm, we define $\bm R^{(s)} =
+    {\sigma^2}^{(s)}\bm I_{n} + {\gamma^2}^{(s)}\bm \lambda'\bm
+    \lambda$. The detailed \textit{internal E} and \textit{M steps} are
+    given below: \\
+    \underline{\textit{Internal E step}}:\\
+    \small
+    \begin{eqnarray*}
+      v^{(s)}_\sigma & = & \mathbb{E}\left[\left(\bm{y}^u - \bm{Mt}^{(s)} - \bm {\lambda v}\right)'\left(\bm{y}^u - \bm{Mt}^{(s)} - \bm {\lambda v}\right)|\bm{y}^u\right] \\
+      & = & {\sigma^4}^{(s)}\left(\bm{y}^u - \bm{Mt}^{(s)}\right)'\bm R^{(s)}\bm R^{(s)}\left(\bm{y}^u - \bm{Mt}^{(s)}\right)  + n\times {\sigma^2}^{(s)} - {\sigma^4}^{(s)} \sum^{n}_{i=1}{\frac{1}{{\sigma^2}^{(s)}+{\gamma^2}^{(s)}\lambda^2_i}}\text{.}\\
+      v^{(s)}_\gamma & = & \mathbb{E}\left[\bm v'\bm v|\bm{y}^u\right] \\
+      & = & {\gamma^4}^{(s)}\left(\bm{y}^u - \bm{Mt}^{(s)} \right)'\bm R^{(s)}\bm \lambda'\bm \lambda \bm R^{(s)}\left(\bm{y}^u - \bm{Mt}^{(s)}\right) + n \times{\gamma^2}^{(s)} - {\gamma^4}^{(s)} \sum^{n}_{i=1}{\frac{\lambda^2_i}{{\sigma^2}^{(s)}+{\gamma^2}^{(s)}\lambda^2_i}}\text{.}\\
+      \bm h^{(s)} & = & \mathbb{E}\left[\bm{y}^u - \bm {\lambda v}  |\bm{y}^u\right]  = \bm{Mt}^{(s)} + {\sigma^2}^{(s)} {R^{-1}}{(s)} \left(\bm{y}^u - \bm{Mt}^{(s)}\right)\text{.}
+    \end{eqnarray*}
+    \normalsize
+    \underline{\textit{Internal M step}}:\\
+    \begin{equation*}
+      {\sigma^2}^{(s+1)} = v^{(s)}_\sigma / n\text{.}
+    \end{equation*}
+    \begin{equation*}
+      {\gamma^2}^{(s+1)} = v^{(s)}_\gamma / n\text{.}
+    \end{equation*}
+    \begin{equation*}
+      \bm{t}^{(s+1)} = \left[\bm M'\bm M\right]^{-1}\bm M'\bm h^{(s)}\text{.}
+    \end{equation*}
+    Given a non-negative user-specified threshold $\delta$ and a maximum number $N_{max}$ of iterations, \textit{Internal E} and \textit{M steps}
+    are alternated until 
+    \begin{equation*}
+      |\log p\left(\bm{y,Z}|\bm{X};\bm \theta^{(s)}\right)- \log p\left(\bm{y,Z}|\bm{X};\bm \theta^{(s+1)}\right)|<\delta\text{ or } s = N_{max}\text{.}
+    \end{equation*}
+    The computational complexity of the
+    \textit{M step} is $\mathcal{O}\left( g^3 + ngN_{max}\right)$, thus not involving $p$. 
+\subsubsection{Attracting and absorbing states}
+\begin{itemize}
+\item \textit{Absorbing states}. The SEM algorithm described above defines a Markov chain which stationnary distribution is concentrated around values of $\bm \theta$ corresponding to local maxima of the likelihood function. This chain has absorbing states in values of $\bm \theta$ such as $\sigma^2=0$ or $\gamma^2=0$. In fact, the \textit{internal M step} reveals that updated values for $\sigma^2$ and $\gamma^2$ are proportional to previous values of those parameters. 
+\item \textit{Attracting states}. We empirically observed that attraction around $\sigma^2=0$ was quite frequent when matrix $\bm X$ is centered and $p>n$. To reduce this attraction, we advocate users of the package not to center the columns when $p$, the number of variables is smaller than $n$, the sample size. A similar behavior was also observed with the MCEM algorithm when $p>n$ and $M<5$.
+\end{itemize}
+}
+\subsection{ { Model selection}}
+ { Once the MLE $\widehat{\bm \theta}$ is calculated (using one or the other
+  algorithm), the maximum log-likelihood and the posterior clustering matrix $\mathbb{E}\left[\bm Z|\bm{y, X};\widehat{\bm \theta} \right]$ are  approximated using MC simulations based on Equations (\ref{eq:ICDLL}) and  (\ref{eq:Gibbs}). The approximated maximum log-likelihood $\widehat{l}$, is then utilized to calculate AIC [\cite{akaike1974}] and BIC [\cite{schwarz1978}] criteria for model selection. In model (\ref{eq:clere0}), those criteria can be written as
+  \begin{equation}
+    \text{BIC} = -2\widehat{l} + 2(g+1)\log (n)\text{ and }\text{AIC} = -2\widehat{l} + 4(g+1)\text{.}
+  \end{equation}
+ An additional criterion for model selection, namely the ICL criterion [\cite{biernacki2000}] is also implemented in the \textbf{R} package \textbf{clere}. The latter criterion can be written
+  \begin{equation}
+    \text{ICL} = -2\widehat{l} + 2(g+1)\log (n) - \sum^{p}_{j=1}{\sum^{g}_{k=1}{\pi_{jk} \log ( \pi_{jk} ) }}\text{,}
+  \end{equation}
+  where $\pi_{jk} = \mathbb{E}\left[z_{jk}|\bm{y, X};\widehat{\bm \theta} \right]$.}
+
+\subsection{ { Interpretation of the special group of variables associated with $b_1=0$}}
+ { The constraint $b_1=0$ is mainly driven by an interpretation purpose. The meaning of this group depends on both the total number $g$ of groups and the estimated value of parameter $\gamma^2$. In fact, when $g>1$ and $\gamma^2$ is small, covariates assigned to that group are likely less relevant to explain the response. Determining whether $\gamma^2$ is small enough is not straightforward. However, when this property holds, we may expect the groups of covariates to be separated. This would for example translate in the posterior probabilities $\pi_{j1}$ being larger than 0.7.  In addition to the benefit in interpretation, the constraint $b_1=0$, reduces the number of parameters to be estimated and consequently the variance of the predictions performed using the model.}
+
+
+
+\section[Package functionalities]{Package functionalities}
+\label{sec:package}
+The \textbf{R} package \textbf{clere} mainly implements a function for parameter
+estimation and model selection: the function {fit.clere()}. Four additional
+functions for graphical representation {plot()} (or {ggPlot()}), summarizing the
+results {summary()}, for getting the predicted clusters of variables {clusters()} and for making predictions from new design matrices {predict()} are
+also implemented in the package. 
+
+Examples of calls for the functions presented in this section are given in the next Section. 
+
+%% Note that you should use the \textbf{}, \textbf{} and {} commands.
+\subsection[The function fit.clere()]{The main function {fit.clere()}}
+
+{The main function {fit.clere()} has only three mandatory arguments: the vector of response {y} (size $n$), the matrix of explanatory variable {x} (size $n\times p$) and the number {g} of groups of regression coefficients which is expected. The optional parameter {analysis}, when it takes the value  {aic},  {bic} or {icl}, allows to test all the possible number of groups between $1$ and $g$. The choice between the two proposed algorithms is possible thanks to the parameter {algorithm}, but we encourage the users to use the default value, the SEM algorithm, which generally overperforms the MCEM algorithm (see the first experiment of the next section).\\
+Several other parameters allow to tune the different numbers of iterations of the estimation algorithm. Generally, higher are these parameters values, better is the quality of the estimation but higher is the computing time. What we advice is to use the default values, and to graphically check the quality of the estimation with plots as in Figure \ref{fig:plot}: if the values of the model parameters are quite stable for a sufficient large part of the iterations, it is ok. If the stability is not reached sufficiently early before the end of the iterations, higher numbers of iterations should be chosen.\\
+Finally, among the remaining parameters (the complete list can be obtained with {help(fit.clere)}), two are especially important: {parallel} allows to run parallel computations (if compatible with the user's computer) and {sparse} allows to impose that one of the regression parameter is equal to 0 and thus to introduce a cluster of not significant explanatory variables.}
+
+%The call of the \textbf{R} function {fit.clere()} is:\\
+%{R> mod <- fit.clere(y, x, g, analysis = "fit", algorithm = "SEM",\\
+%                   + nItMC = 1, nItEM = 1000, nBurn = 200, dp = 10, nsamp = 2000,\\
+%                   + maxit = 1000, tol = 1e-6, plotit = FALSE, sparse = FALSE,\\
+%                   + theta0 = NULL, Z0 = NULL)}\\ \\
+%
+%
+%Each of the input function arguments is described in Table \ref{tab:inputargs}. The {fit.clere()} function returns an \textbf{R} object of class {Clere}. In addition to all input parameters, this object has the other slots detailed in Table \ref{tab:outputargs}.
+%%\subsubsection{Input/Output arguments}
+%  \begin{center}
+%  %\small
+%  %\begin{table}[h!]
+%    \bottomcaption{\label{tab:inputargs} Input arguments of the function {fit.clere()}.}  
+%    \begin{supertabular}{ll}
+%      \toprule
+%       Argument name & Description \\
+%      \midrule
+%      {y}       & is a vector of response of size $n$ \\ \\
+%      {x}       & is a $n \times p$ matrix. \\ \\
+%       {g}      & is either the exact number groups (when {analysis = "fit"}) \\ & or the maximum
+%                     number of groups to be tested \\ & (when  {analysis = "aic"}, {analysis = "bic"} or {analysis = "icl"}). \\ \\
+%
+%      {analysis} & takes value in $\{${"fit","aic","bic","icl"}$\}$. \\ & When {analysis = "fit"},\\
+%                      & the model is fitted assuming that the exact number of groups is $g$. \\
+%                      & When instead, {analysis = "aic"}, {analysis = "bic"} or {analysis = "icl"}, \\
+%                      & the model is fitted $g$ times with a number of group(s) between 1 and $g$.\\
+%                      & The $g$ models are then compared respectively using AIC, BIC and ICL \\
+%                      & criterion and the best model is returned.\\ \\
+%
+%      {algorithm} & allows to select between SEM ({algorithm = "SEM"}) and \\
+%                       & MCEM ({algorithm = "MCEM"}) algorithms to estimate \\
+%                       & the model parameters.\\ \\
+%
+%       {nItMC}    & is the number of complete Gibbs sampling iterations run before simulating  \\
+%                       &a partition $\bm Z$ when running SEM algorithm.\\ \\
+%
+%       {nItEM}    & is the number of SEM or MCEM iterations.\\ \\
+%
+%       {nBurn}    & is the number of iterations \textit{burn-in} discarded to calculate the MLE in the\\
+%                       & SEM algorithm. This number is also used in the MCEM algorithm as a \\
+%                       & number of discarded iterations for the Gibbs sampling required to \\
+%                       & draw from $p(\mathbf{y},\bm \beta,\mathbf{Z}|\mathbf{X};\bm \theta)$. \\ \\
+%
+%       {dp}       & is the length of thinning interval used to break dependence between the sampled\\
+%                       & partitions. It corresponds to the number of Gibbs iterations to skip between\\
+%                       & consecutive draws of the chain. \\ \\
+%
+%       {nsamp}    & is the number of Gibbs iterations used to approximate the log-likelihood. \\ \\
+%
+%       {maxit}    & is the maximum number of \textit{internal EM} algorithm iterations runnned at the \\
+%                       & \textit{M step} of the SEM algorithm. \\ \\
+%
+%       {tol}      & is the tolerance parameter required to end the \textit{internal EM} \\
+%                       & algorithm runned at the \textit{M step} of the SEM algorithm. \\ \\ 
+%
+%       {nstart}   & is the number of random starting points used to fit the model. \\ \\
+%
+%       {parallel} & equals {FALSE} or {TRUE}. It indicates whether parameter the fit from different random \\
+%                       & starting points should be perform through parallel computing. It uses the function\\
+%                       & {mclapply} from package \textbf{parallel}. \\ \\                   
+%  
+%       {plotit}   & equals {FALSE} or {TRUE}. This boolean parameter indicates whether a summary \\
+%                       & graph should be plotted. \\ \\
+%
+%       {sparse}   & equals {FALSE} or {TRUE}. It indicates whether parameter $b_1$ is set to 0. \\ \\
+%
+%       {theta0}   & is a user-specified initial guess of the model parameter $\bm \theta$. \\ \\
+%       {Z0}       & is a user-specified initial partition of the variables given as a vector of size $p$ \\
+%                       & of integers between 1 and $g$\\
+%     \bottomrule    
+%    \end{supertabular}
+%     
+%    %\caption{\label{tab:inputargs} Input arguments of the function {fit.clere()}.}
+%  %\end{table}
+%  %\normalsize
+%  \end{center}
+%
+%  \begin{center}
+%  \begin{table}[h!]    
+%    \begin{tabular}{ll}
+%      \toprule
+%       Argument name & Description \\
+%      \midrule
+%      {intercept} & is the estimated value for parameter $\beta_0$.\\ \\
+%      {b}         & is the estimated value for parameter $\bm b$. It is a numeric vector of size $g$.\\ \\
+%      {pi}        & is the estimated value for parameter $\bm \pi$. It is a numeric vector of size $g$.\\ \\
+%      {sigma2}    & is the estimated value for parameter $\sigma^2$. \\ \\
+%      {gamma2}    & is the estimated value for parameter $\gamma^2$. \\ \\
+%      {theta}     & is a {nItEM} $\times$ (2{g}+4) matrix containing values of \\
+%                       & the model parameters and complete data log-likelihood at each iteration \\
+%                       & of the SEM/MCEM algorithm. \\ \\
+%     {likelihood} & is an approximation of the log-likelihood using {nsamp} MC simulations. \\ \\
+%    {entropy}     & is an approximation of the entropy using {nsamp} MC simulations. \\ \\
+%    {P}           & is a $p \times g$ matrix approximating $\mathbb{E}\left[\bm Z|\bm y, \bm X; \hat{\bm \theta}\right]$ using {nsamp} MC simulations.\\ \\
+%    {Bw}          & is a $p$ $\times$ {nsamp} matrix which columns are samples from \\
+%                       & the distribution $p(\bm \beta |\bm y,\bm X;\hat{\bm \theta})$.\\ \\
+%    {Zw}          & is a $p$ $\times$ {nsamp} matrix which columns are samples from \\
+%                       & the distribution $p(\bm Z |\bm y,\bm X;\hat{\bm \theta})$. Each column is sampled \\
+%                       & partition coded a vector of size $p$ containing integers \\ 
+%                       & taking values between 0 and ($g-1$).\\
+%    \bottomrule
+%    \end{tabular}
+%     \caption{\label{tab:outputargs} The function {fit.clere()} function returns an \textbf{R} object of class {Clere}. In addition to all input parameters, this object has the other slots described in this table.}
+%  \end{table}
+%  \end{center}
+
+\subsection[Companion functions summary(), plot(), ggPlot() clusters() and predict()]{Secondary functions {summary()}, {plot()}, {ggPlot()}, {clusters()} and {predict()}}
+
+The {summary()} function prints an overview of the estimated parameters and returns the estimated likelihood and information based model selection criteria (AIC, BIC and ICL). 
+
+The call of functions {plot()} and {ggPlot()} are similar to the one of function {summary()}. The latter function produces graphs such as ones presented in Figure \ref{fig:plot}. The function {ggPlot()} requires a prior installation of the \textbf{R} package \textbf{ggplot2} [\cite{ggplot2-ref}]. However, there is no dependencies with the latter package since the \textbf{R} package \textbf{clere} can be installed without \textbf{ggplot2}. When \textbf{ggplot2} is not installed, the user can still make use of the function {plot()}.
+\begin{figure}[h!]    
+    \centerline{
+      \includegraphics{images/Figure1.pdf}
+    }
+    \caption{\label{fig:plot} Values of the model parameters in view of SEM algorithm iterations. The vertical green line in each of the four plots, represents the number {nBurn} of iterations discarded before calculating maximum likelihood estimates.}
+\end{figure}  
+
+The function {clusters()}, takes one argument of class {Clere} and a {threshold} argument. This function assigns each variable to the group which associated conditional probability of membership is larger than the given {threshold}. When {threshold = NULL}, the maximum a posteriori (MAP) strategy is used to infer the clusters.
+
+The {predict()} function has two arguments, being a {clere} and a design matrix $\bm X_{new}$. Using that new design matrix, the {predict()} function returns an approximation of $\mathbb{E}\left[\bm X_{new}\bm \beta|\bm y, \bm X; \hat{\bm \theta}\right]$.
+
+\section[Numerical experiments on real datasets]{Numerical experiments on real datasets}
+\label{sec:numerical}
+{This section presents two sets of numerical experiments. The first set of experiments aims at comparing the MCEM and SEM algorithms in terms of computational time and estimation or prediction accuracy. The second set of experiments aimed at comparing CLERE to standard dimension reduction techniques. The latter comparison is performed on both simulated and real data.}
+\subsection{SEM algorithm versus MCEM algorithm}
+\label{sec:semvsmcem}
+\subsubsection{Description of the simulation study}
+{
+In this section, a comparison between the SEM algorithm and the MCEM algorithm is performed.
+This comparison is performed using the four following performance indicators:
+\begin{enumerate}
+\item Computational time (CT) to run a pre-defined number of SEM/MCEM iterations. This number was set to 2,000 in this simulation study.
+\item Mean squared estimation error (MSEE) defined as 
+\begin{equation*} 
+ MSEE_a = \mathbb{E}\left[(\bm{\theta-\widehat{\theta}_a})'(\bm{\theta-\widehat{\theta}_a})\right]\text{,}
+\end{equation*}
+where $a\in\left\{\text{{"SEM","MCEM"}}\right\}$ and $\widehat{\theta}_a$ is an estimated value for parameter $\bm \theta$ obtained with algorithm $a$. Since $\bm \theta$ is only known up to a permutation of the group labels, we chose the permutation leading to the smallest MSEE value.
+\item Mean squared prediction error (MSPE) defined as 
+\begin{equation*} 
+ MSPE_a = \mathbb{E}\left[(\bm{y^v-X^v\widehat{\theta}_a})'(\bm{y^v-X^v\widehat{\theta}_a})\right]\text{,}
+\end{equation*}
+where $\bm y^v$ and $\bm X^v$ are respectively a vector of responses and a design matrix from a validation dataset.
+\item Maximum log-likelihood (ML) reached. This quantity was approximated using 1,000 samples from $p(\bm Z|\bm y;\widehat{\bm \theta})$.
+\end{enumerate}
+Three versions of the MCEM algorithm were proposed for comparison with the SEM algorithm, depending on the number $M$ (or {nsamp}) of Gibbs iterations used to approximate the \textit{E step}. That number was varied between 5, 25 and 125. Those versions were respectively denoted MCEM$_5$, MCEM$_{25}$ and MCEM$_{125}$. The comparison was performed using 200 simulated datasets. Each training dataset consisted of $n=25$ individuals and $p=50$ variables. Validation datasets used to calculate MSPE consisted of 1,000 individuals each. All covariates were simulated  independently according to the standard Gaussian distribution:
+\begin{equation*}
+ \forall(i,j)\text{ }x_{ij}\sim\mathcal{N}(0,1)\text{.}
+\end{equation*}
+Both training and validation datasets were simulated according to model (\ref{eq:clere0}) using $\beta_0 = 0$, $\bm b = (0,3,15)'$, $\bm \pi = (0.64,0.20,0.16)'$, $\sigma^2=1$ and $\gamma^2=0$. This is equivalent to simulate data according to the standard linear regression model defined by:
+\begin{equation*}
+ y_i \sim \mathcal{N}\left(\sum^{32}_{j=1}{0 \times x_{ij}} + \sum^{42}_{j=33}{3 \times x_{ij}} + \sum^{50}_{j=43}{15 \times x_{ij}},1\right)
+\end{equation*}
+All algorithms were run using 10 different random starting points. Estimates yielding the largest likelihood were then used for the comparison.
+\subsubsection{Results of the comparison}
+Table \ref{tab:simulations} summarizes the results of the comparison between the algorithms. The SEM algorithm ran faster than its competitors in  74.5\% of the simulations. The gain in computational time yielded by SEM was between 1.3-fold (when compared to MCEM$_5$) and 22.2-fold (when compared to MCEM$_{125}$). This improvement was accompanied with a good accuracy in parameter estimation (second best median MSEE: 0.258; smallest MSEE in 25.5\% of the simulations) and a smaller prediction error (smallest median MSPE: 1.237; smallest MSPE in 48.5\% of the simulations). Those good performances were mainly explained by the fact that the SEM algorithm most of the time reached a better likelihood than the other algorithms.}
+  \begin{center}
+  \begin{table}[h!]    
+    \begin{tabular}{llrr}
+      \toprule
+      & & \% of times              & Median       \\
+      Performance indicators & Algorithms & the algorithm was best      & (Std. Err.)\\
+      \midrule
+      CT (seconds)  &  \textbf{SEM}  &  \textbf{74.50} &  \textbf{1.60 ( 0.23 )} \\
+      &  MCEM$_5$                &  25.50          &  2.04  ( 0.13 ) \\
+      &  MCEM$_{25}$             &  0              &  7.63  ( 0.46 ) \\
+      &  MCEM$_{125}$            &  0              &  35.6  ( 2.22 ) \\
+      \\
+      \midrule
+      MSEE &  \textbf{SEM}      &  25.5 &  0.258 ( 0.19 ) \\
+      &  MCEM$_5$               &  \textbf{33.0}          &  1.019 ( 0.97 ) \\
+      &  MCEM$_{25}$            &  22.5          &  \textbf{0.257 ( 0.21 )} \\
+      &  MCEM$_{125}$           &  19.0          &  0.295 ( 0.25 ) \\
+      \\
+      \midrule
+      MSPE &  \textbf{SEM}        &  \textbf{48.5}   &  \textbf{1.237  ( 0.16 )} \\
+      &  MCEM$_5$             &  20.5            &  1.523  ( 0.49 ) \\
+      &  MCEM$_{25}$            &  19.0            &  1.258  ( 0.19 ) \\
+      &  MCEM$_{125}$           &  12.0            &  1.272  ( 0.21 ) \\
+      &  True parameter           &  ---             &  1.159  ( 0.08 ) \\
+      \\
+      \midrule
+      ML  &  \textbf{SEM}               &  \textbf{59.5} &  \textbf{-78.60  ( 3.60 )} \\
+      &  MCEM$_5$                   &  10.5          &  -79.98  ( 5.78 ) \\
+      &  MCEM$_{25}$                  &  18.0          &  -79.00  ( 3.84 ) \\
+      &  MCEM$_{125}$                 &  12.0          &  -79.47  ( 4.20 ) \\
+      &  True parameter                 &  ---           &  -77.60  ( 2.37 ) \\
+      \bottomrule
+    \end{tabular}
+    \caption{\label{tab:simulations} Performance indicators used to compare SEM and MCEM algorithms. Computational Time (CT) was measured on a Intel(R) Xeon(R) CPU E7- 4870  @ 2.40GHz processor. The best algorithm is defined as the one that either reached the largest log-likelihood (ML) or the lowest CT, Mean Squared Prediction Error (MSPE) and Mean Squared Estimation Error (MSEE). The best algorithm for each criterion is highlighted in bold font.}
+  \end{table}
+  \end{center}
+
+\subsection{Comparison with other methods}
+\label{sec:simulation}
+\subsubsection{Description of the methods}
+{
+In this section, we compare our model to standard dimension reduction
+  approaches in terms of MSPE. Although a more detailed comparison was proposed in [\cite{yengo2013}], we propose here a quick illustration of the relative predictive performance of our model. The comparison is achieved using data simulated according 
+  to the scenario described above in Section \ref{sec:semvsmcem}.
+  The methods selected for comparison are %the variable   selection using LARS algorithm [\cite{efron2004}],
+  the ridge  regression [\cite{hoerl1970}],
+  the elastic net [\cite{zou2005}], the LASSO
+  [\cite{tibshirani1996}], PACS [\cite{pacs2013}], the method of Park and
+  colleagues [\cite{park2007}] (subsequently denoted AVG) and the spike
+  and slab model [\cite{ishwaran2005}] (subsequently denoted SS). The
+  first three methods are implemented in the freely available \textbf{R} package \textbf{glmnet}. The latter package was used with default
+  options regarding the choice of tuning parameters.\\ 
+   PACS methodology proposes to estimate the regression coefficients by solving a penalized least squares problem. It imposes a constraint on $\bm \beta$ that is a weighted combination of the $L^1$ norm and the pairwise $L^\infty$ norm. Upper-bounding the pairwise  $L^\infty$ norm
+  enforces the covariates to have close coefficients. When the constraint is strong enough, closeness
+  translates into equality achieving thus a grouping property. For PACS, no software was available. Only an \textbf{R} script was released on Bondell's webpage\footnote{$http://www4.stat.ncsu.edu/~bondell/Software/PACS/PACS.R.r$}.\\
+  Since this \textbf{R} script was running very slowly, we decided to
+  reimplement it in \textbf{C++} and observed a 30-fold speed-up of computational time. Similarly to Bondell's
+  \textbf{R} script, our implementation uses two parameters \texttt{lambda} and
+  \texttt{betawt}.  In [\cite{pacs2013}], the authors suggest assigning \texttt{betawt} with
+  the coefficients obtained from a ridge regression model after the
+  tuning parameter was selected using AIC. In this simulation study we
+  used the same strategy; however the ridge parameter was selected via
+  5-fold cross validation. 5-fold CV was preferred to AIC since
+  selecting the ridge parameter using AIC always led to estimated
+  coefficients equal to zero. Once \texttt{betawt} was selected,
+  \texttt{lambda} was chosen via 5-fold cross validation among the
+  following values: 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20,
+  50, 100, 200 and 500. All other default parameters of their script were
+  unchanged. \\
+  The AVG method is a two-step approach. The first step uses hierarchical
+  clustering of covariates to create surrogate covariates by averaging the variables within each
+  group. Those new predictors are afterwards included in a linear regression
+  model, replacing the primary variables. A variable selection algorithm is then applied to select the most predictive groups of covariates. 
+  To implement this method, we followed the algorithm described
+  in [\cite{park2007}] and programmed it in \textbf{R}.\\
+  The spike and slab model is a Bayesian approach for variable selection. It is based on the assumption that the regression coefficients are distributed according to a mixture of two centered Gaussian distributions with different variances. One component of the mixture (the spike)  is chosen to have a small variance, while the other component (the slab) is allowed to have a large variance. Variables assigned to the spike are dropped from the model. We used the R package \textbf{spikeslab} to run the spike and slab models. Especially, we used the function \textbf{spikeslab} from that package to detect influential variables. The number of iterations used to run the function \textbf{spikeslab} was 2,000 (1,000 discarded). \\
+  When running \texttt{fit.clere()}, the number  \texttt{nItEM} of SEM
+  iterations was set to 2,000. The number \texttt{g} of groups for
+  CLERE was chosen between 1 and 5 using AIC (option
+  \texttt{analysis="aic"}). Two versions of CLERE were considered: the
+  one with all parameters estimated and the one with $b_1$ set to
+  0. The latter approach is subsequently denoted CLERE$_0$ (option \texttt{sparse=TRUE}).
+}
+  
+\subsubsection{Results of the comparison}
+{
+  Figure \ref{fig:sims}, summarizes the comparison between the methods. In this simulated scenario, CLERE outperformed the other methods in terms of prediction error. Those good performances were improved when parameter $b_1$ was set to 0. CLERE was also the most parcimonous approach with an averaged number of estimated parameters equal to 8.5 (6.7 when $b_1=0$). The second best approach was PACS which also led to parcimonous models. variable selection approaches as whole yielded the largest prediction error in this simulation. 
+\begin{figure}[h!]    
+    \centerline{
+      \includegraphics{images/Simulations.pdf}
+    }
+    \caption{\label{fig:sims} Comparison between CLERE and some standard dimension reduction approaches. The number of estimated parameters (+/- standard error) is given with the name of the method to be compared.}
+\end{figure} 
+}
+
+\subsection{Real datasets analysis}
+\label{sec:realdata}
+\subsubsection{Description of the datasets}
+
+  We used in this section the real datasets {Prostate} and {eyedata} from the \textbf{R} packages \textbf{lasso2} and \textbf{flare} respectively. 
+
+The {Prostate} dataset comes from a study that examined the correlation between the level of prostate specific antigen and a number of clinical measures in $n=97$ men who were about to receive a radical prostatectomy. This dataset was used in multiple publications including [\cite{tibshirani1996}]. We used the prostate specific antigen (variable {lpsa}) as response variable and the $p=8$ other measurements as covariates.
+
+The {eyedata} dataset is extracted from the published study of [\cite{scheetz2006regulation}]. This dataset consists in gene expression levels measured at $p=200$ probes in $n=120$ rats. The response variable utilized was the expression of the TRIM32 gene which is a biomarker of the Bardet-Bidel Syndrome (BBS).
+
+\subsubsection{Other packages for high-dimensional linear regression}
+Those two datasets was utilized to compare CLERE to the following methods: variable selection using LARS algorithm [\cite{efron2004}],
+  the ridge  regression [\cite{hoerl1970}],
+  the elastic net [\cite{zou2005}], the LASSO
+  [\cite{tibshirani1996}], PACS [\cite{pacs2013}], the method of Park and
+  colleagues [\cite{park2007}] (subsequently denoted by AVG) and the spike
+  and slab model [\cite{ishwaran2005}] (subsequently denoted by SS).
+  
+  The first three methods are implemented in the freely available \textbf{R} package \textbf{glmnet}. This package was used with default
+  options regarding the choice of tuning parameters. \\
+  PACS methodology proposes to estimate the regression coefficients by
+  solving a penalized least squares problem. It imposes a constraint
+  on $\bm \beta$ that is a weighted combination of the $L^1$ norm and
+  the pairwise $L^\infty$ norm. Upper-bounding the pairwise
+  $L^\infty$ norm enforces the covariates to have close
+  coefficients. When the constraint is strong enough, closeness
+  translates into equality achieving thus a grouping property. For
+  PACS, no software was available. Only an \textbf{R} script was
+  released on Bondell's webpage ($http://www4.stat.ncsu.edu/~bondell/Software/PACS/PACS.R.r$).
+  Since this \textbf{R} script was running very slowly, we decided to
+  reimplement it in \textbf{C++} and observed a 30-fold speed-up of computational time. Similarly to Bondell's
+  \textbf{R} script, our implementation uses two parameters \texttt{lambda} and
+  \texttt{betawt}.  In [\cite{pacs2013}], the authors suggest assigning \texttt{betawt} with
+  the coefficients obtained from a ridge regression model after the
+  tuning parameter was selected using AIC. In this simulation study we
+  used the same strategy; however the ridge parameter was selected via
+  5-fold cross validation (CV). 5-fold CV was preferred to AIC since
+  selecting the ridge parameter using AIC always led to estimated
+  coefficients equal to zero. Once \texttt{betawt} was selected,
+  \texttt{lambda} was chosen via 5-fold cross validation among the
+  following values: 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20,
+  50, 100, 200 and 500. All other default parameters of their script were
+  unchanged. 
+
+  The AVG method is a two-step approach. The first step uses hierarchical
+  clustering of covariates to create surrogate covariates by averaging the variables within each
+  group. Those new predictors are afterwards included in a linear regression
+  model, replacing the primary variables. A variable selection algorithm is then applied to select the most predictive groups of covariates. 
+  To implement this method, we followed the algorithm described
+  in [\cite{park2007}] and programmed it in R.
+
+  The spike and slab model is a Bayesian approach for variable selection. It is based on the assumption that the regression coefficients are distributed according to a mixture of two centered Gaussian distributions with different variances. One component of the mixture (the spike)  is chosen to have a small variance, while the other component (the slab) is allowed to have a large variance. Variables assigned to the spike are dropped from the model. We used the R package \textbf{spikeslab} to run the spike and slab models. Especially, we used the function \textbf{spikeslab} from that package to detect influential variables. The number of iterations used to run the function \textbf{spikeslab} was 2,000 (1,000 discarded). 
+
+  When running {fit.clere()}, the number {nItEM} of SEM iterations was set to 2,000. The number {g} of groups for CLERE was
+  chosen between 1 and 5 using AIC (option {analysis="aic"}). Two versions of CLERE were considered: the one with all parameters estimated and the one with $b_1$ set to 0. The latter approach is subsequently denoted by CLERE$_0$ (option {sparse=TRUE}).
+
+
+All the methods were compared in term of out-of-sample prediction error estimated using cross-validation (CV). 100 CV statistics were calculated by randomly splitting each dataset into training (80\% of the sample size) and validation (20\% of the sample size) sets. Those CV statistics were then averaged and compared across the methods in Table \ref{tab:realdata}.
+
+\subsubsection{Running the analysis}
+\par{
+ Before presenting the results of the comparison between CLERE and its competitors, we illustrate the command lines to run the analysis of the {Prostate} dataset. The dataset is loaded by typing:
+ \begin{verbatim}
+ R> library(lasso2)
+ R> data(Prostate)
+ R> y <- Prostate[,"lpsa"]
+ R> x <- as.matrix(Prostate[,-which(colnames(Prostate)=="lpsa")]) 
+ \end{verbatim}
+ Possible training ({xt} and {yt}) and validation ({xv} and {yv}) sets are generated as follows:
+ \begin{verbatim}
+ R> itraining <- 1:(0.8*nrow(x))
+ R> xt <- x[ itraining,] ; yt <- y[ itraining]
+ R> xv <- x[-itraining,] ; yv <- y[-itraining]
+ \end{verbatim}
+ The {fit.clere()} function is run using AIC criterion to select the number of groups between 1 and 5. To lessen the impact of local minima in the model selection, 5 random starting points are used. This can be implemented as written below
+ \begin{verbatim}
+ R> mod <- fit.clere(y=yt,x=xt,g=5,analysis="aic",parallel=TRUE,
+ +                   nstart=5,sparse=TRUE,nItEM=2000,nBurn=1000,
+ +                   nItMC=10,dp=5,nsamp=1000)
+ R> summary(mod)
+    -------------------------------
+    | CLERE | Yengo et al. (2013) |
+    -------------------------------
+
+    Model object 2 groups of variables ( Selected using AIC criterion )
+    ---
+     Estimated parameters using SEM algorithm are
+     intercept = -0.1395
+     b         = 0.0000   0.4737
+     pi        = 0.7188   0.2812
+     sigma2    = 0.3951
+     gamma2    = 4.181e-08
+
+    ---
+     Log-likelihood =  -78.28 
+     Entropy        =  0.5152 
+     AIC            =  168.57 
+     BIC            =  182.63
+     ICL            =  183.15 
+
+R> plot(mod)
+\end{verbatim}
+ Running the command {ggPlot(mod)} generates the plot given in Figure \ref{fig:plot}. We can also access the cluster membership by running the command {clusters()}. For example, running the command {clusters(mod,threshold=0.7)} yields
+\begin{verbatim}
+R> clusters(mod,thresold=0.7)
+ lcavol lweight     age    lbph     svi     lcp gleason   pgg45 
+      2       2       1       1       1       1       1       1 
+\end{verbatim}
+In the example above 2 variables, being the cancer volume ({lcavol}) and the prostate weight ({lweight}), were assigned to group 2 ($b_2=0.4737$). The other 6 variables were assigned to group 1 ($b_1=0$). Posterior probabilities of membership are available through the slot {P} in object of class {Clere}.
+\begin{verbatim}
+R> mod@P
+        Group 1 Group 2
+lcavol    0.000   1.000
+lweight   0.000   1.000
+age       1.000   0.000
+lbph      1.000   0.000
+svi       0.789   0.211
+lcp       1.000   0.000
+gleason   1.000   0.000
+pgg45     1.000   0.000 
+\end{verbatim}
+The covariates were respectively assigned to their group with a probability larger than 0.7. Moreover, given that parameter $\gamma^2$ had very small value ($\widehat{\gamma^2} = 4.181\times10^{-8}$), we can argue that cancer volume and prostate weight are the only relevant explanatory covariates. To assess the prediction error associated with the model we can run the command {predict()} as follows: 
+\begin{verbatim}
+R> error <- mean( (yv - predict(mod,xv))^2 )
+R> error
+[1] 1.550407 
+\end{verbatim}
+}
+\subsubsection{Results of the analysis}
+\par{
+Table \ref{tab:realdata} summarizes the prediction errors and the number of parameters obtained for all the methods. CLERE$_0$ had the lowest prediction error in the analysis of the {Prostate} dataset and the second best performance with the {eyedata} dataset. The AVG method was also very competitive compared to variable selection approaches stressing thus the relevance of creating groups of variables to reduce the dimensionality. It is worth noting that in both datasets, imposing the constraint $b_1=0$ improved the predictive performance of CLERE. 
+
+In the {Prostate} dataset, CLERE robustly identified two groups of variables representing influential ($b_2>0)$ and not relevant variables ($b_1=0$). In the {eyedata} dataset in turn, AIC led to select only one group of variables. However, this did not lessened the predictive performance of the model since CLERE$_0$ was second best after AVG, while needing significantly less parameters. PACS low performed in both datasets. The Elastic net showed good predictive performances compared to the variable selection methods like LASSO or spike and slab model. Ridge regression and Elastic net had comparable results in both datasets.
+
+  \begin{center}
+  \begin{table}[h!]    
+    \begin{tabular}{llrr}
+      \toprule
+              &            & 100$\times$Averaged CV-statistic & Number of parameters\\
+      Dataset & Methods    & (Std. Error)          & (Std. Error)\\
+      \midrule
+   {Prostate}  &  LASSO       &  59.58 (3.46)         &   5.75 (0.29)\\
+                    &  RIDGE       &  57.58 (3.36)         &   8.00 (0.00)\\
+                    &  Elastic net &  57.37 (3.39)         &   8.00 (0.00) \\
+                    &  CLERE       &  58.18 (3.13)         &   6.00 (0.00) \\
+                    &  \textbf{CLERE$_0$}            &  \textbf{55.48 (3.46)}          &   6.00 (0.00) \\
+                    &  AVG         &  60.59 (3.58)         &   6.30 (0.16) \\
+                    &  PACS        &  67.08 (5.51)         &   5.15 (0.30)\\
+                    &  Spike and slab &  57.76 (3.21)      &   5.70 (0.28) \\
+      \\
+      \midrule
+    {eyedata}  &  LASSO       &  0.878 (0.05)          &   27 (1.69) \\
+                    &  RIDGE       &  0.854 (0.05)          &  200 (0.00)\\
+                    &  Elastic net &  0.851 (0.05)          &  200 (0.00) \\
+                    &  CLERE       &  0.877 (0.06)          &    4 (0.00)\\
+                    &  CLERE$_0$   &  0.839 (0.05)          & 4.12 (0.07)\\
+                    &  \textbf{AVG}&  \textbf{0.811 (0.06)} &  17.2 (0.98)\\
+                    &  PACS        &  2.019 (0.023)         &  1.38 (0.07)\\
+                    &  Spike and slab &  0.951 (0.07)       &  11.5 (0.55)\\
+
+      \bottomrule
+    \end{tabular}
+    \caption{\label{tab:realdata} Real data analysis. Out-of-sample prediction error (averaged CV-statistic) was estimated using cross-validation in 100 splitted datasets. The number of parameters reported for CLERE/CLERE$_0$ was selected using AIC.}
+  \end{table}
+  \end{center}
+}
+\section[Conclusions]{Conclusions}
+\label{sec:conc}
+We presented in this paper the \textbf{R} package \textbf{clere}. This package implements two efficient algorithms for fitting the CLusterwise Effect REgression model: the MCEM and the SEM algorithms. If the MCEM algorithm is to be preferred when $p<n$, the SEM algorithm is more efficient for high dimensional datasets ($n<p$). %The good performances of SEM over MCEM could have been expected regarding the computational complexities of the two algorithms that are $\mathcal{O}\left( npg + g^3 + N_{max}ng\right)$ and $\mathcal{O}\left( M(p^2 + pg)\right)$ respectively. In fact, as long as $p>n$, the SEM algorithm has a lower complexity. However, the computational time to run our SEM algorithm is more variable compared to MCEM as its \text{M step} does not have a closed form. We finally advocate the use the MCEM algorithm only when $p<n$. 
+Another important feature for model interpretation is proposed by constraining the model parameter $b_1$ to equal 0, which leads to carry out variable selection. Such constraint may also lead to a reduced prediction error. We illustrated on a real dataset, how to run an analysis using a detailed \textbf{R} script. Our model can easily be extended to the analysis of binary responses. This extension will be proposed in forthcoming version of the package.
+
+\bibliographystyle{plain}
+\bibliography{biblio}
+\end{document}
