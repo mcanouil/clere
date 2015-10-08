@@ -17,7 +17,8 @@
   software was available.  Only an R script was released on Bondell's
   webpage (http://www4.stat.ncsu.edu/~bondell/Software/PACS/PACS.R.r).
   Since this R script was running very slowly, we decided to reimplement
-  it in C++ and interfaced it with the present R package clere.
+  it in C++ and interfaced it with the present R package clere. This
+  corresponds to the option \code{type=1} in Bondell's script.
 }
 
 \usage{
@@ -30,7 +31,7 @@
   \item{X}{[matrix]: The matrix of predictors - size \code{n} rows and \code{p} columns.}
   \item{lambda}{[numeric]: A non-negative penalty term that controls simultaneouly clusetering and sparsity.}
   \item{betaInput}{[numeric]: A vector of initial guess of the model parameters. The authors suggest to use coefficients obtained after fitting a ridge regression with the shrinkage parameter selected using AIC criterion.}
-  \item{epsPACS}{[numeric]: A tolerance threshold that control the convergence of the algroithm. The default value fixed in Bondell's initial script is 1e-5.}
+  \item{epsPACS}{[numeric]: A tolerance threshold that control the convergence of the algorithm. The default value fixed in Bondell's initial script is 1e-5.}
   \item{nItMax}{[numeric]: Maximum number of iterations in the algorithm.}
 }
 
@@ -56,11 +57,13 @@
 \keyword{function}
 
 \examples{
-  n    <- 100
-  p    <-  20
-  Beta <- rep(c(0,2),10)
-  eps  <- rnorm(n,sd=3)
-  x    <- matrix(rnorm(n*p), nrow = n, ncol = p)
-  y    <- as.numeric(10+x\%*\%Beta+eps)
-  mod  <- fitPacs(Y=y,X=x,lambda=1.25,betaInput=rnorm(p,mean=Beta),epsPACS=1e-5,nItMax=1000)
+   n     <- 100
+   p     <-  20
+   Beta  <- rep(c(0,2),10)
+   eps   <- rnorm(n,sd=3)
+   x     <- matrix(rnorm(n*p), nrow = n, ncol = p)
+   y     <- as.numeric(10+x\%*\%Beta+eps)
+   bInit <- lm(y~scale(x))$coefficients[-1]
+   mod   <- fitPacs(Y=y,X=x,lambda=1.25,betaInput=bInit,epsPACS=1e-5,nItMax=1000) 
+
 }

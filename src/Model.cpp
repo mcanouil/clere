@@ -416,13 +416,12 @@ void Model::updateZ_GibbsRows(IO *io, MatrixXd &xz, VectorXd &e,
 			      VectorXi &perms, int nChanges){
   int n = io->n;
   int i,j,k;
-  int oj,og,ng,kmin;
-  kmin=0;
+  int oj,og,ng;
   double bk_old,bk_new,exj,nxj,norm;
   double lpmax = 0.0;
   og = 0;
   oj = 0;
-  kmin = 0;
+  //int kmin = 0;
   permute(perms);
 
   for(k=0;k<g;k++) { 

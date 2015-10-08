@@ -8,7 +8,7 @@
 \description{
   This data  contains two matrices: one for the \code{Prostat}e dataset (from R
   package \code{lasso2}) and the other for the \code{eyedata} dataset (from R package
-  \code{flare}). Each matrix has 50 rows and 28 colums. The columns can be
+  \code{flare}). Each matrix has 5 rows and 28 colums. The columns can be
   grouped as three blocs of 9 (for each method compared: \code{LASSO}, \code{RIDGE},
   Elastic net [\code{ELNET}], Stepwise variable selection [\code{STEP}], \code{CLERE}, CLERE
   sparse [\code{CLERE_s}], Spike and Slab [\code{SS}], \code{AVG} method and Pairwise

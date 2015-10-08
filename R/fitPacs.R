@@ -34,6 +34,12 @@ fitPacs  <- function(Y = rnorm(10),
                      betaInput=rnorm(10),
                      epsPACS=1e-5,
                      nItMax=1000){
+  if (lambda <= 0) {
+    stop("[Clere:fitPacs] Non negative (or  = 0) values for tuning parameter lambda are not allowed!\n",call. = FALSE)
+  }
+  if (epsPACS <= 0) {
+    stop("[Clere:fitPacs] Non negative (or  = 0) values for tolerance parameter epsPACS are not allowed!\n",call. = FALSE)
+  }
   
   n <- nrow(X)
   p <- ncol(X)

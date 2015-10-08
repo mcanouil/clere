@@ -17,8 +17,8 @@
   \tabular{ll}{
     Package: \tab clere\cr
     Title: \tab CLERE methodology for simultaneous variables clustering and regression\cr
-    Version: \tab 1.1.1\cr
-    Date: \tab 2015-09-19\cr
+    Version: \tab 1.1.2\cr
+    Date: \tab 2015-10-02\cr
     Author: \tab Loic Yengo <loic.yengo@gmail.com>\cr
     Contributor: \tab Mickael Canouil <mickael.canouil@cnrs.fr>\cr
     Maintainer: \tab Loic Yengo <loic.yengo@gmail.com>\cr

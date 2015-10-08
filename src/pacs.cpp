@@ -91,19 +91,24 @@ RcppExport SEXP pacs(SEXP R_IOPACSobj){
   VectorXd dpb    = VectorXd(q);
   dmb             = dm * betatilde;
   dpb             = dp * betatilde;
-  int p2q         = p+2*q;
+  
+  // Loic rewrites...  
+  int p2q = p+2*q;
+  int ppq = p+q;
+  int l_p, l_ppq;
   VectorXd ascvec = VectorXd(p2q); 
-  for(l=0;l<p+2*q;l++){
-    if(l<p){
-      ascvec(l) = 1.0 / (littleeps+abs(betatilde(l)));
-    }else{
-      if(l<p+q){
-	ascvec(l) = 1.0 / (littleeps+abs( dmb(l-p) ));
-      }else{
-	ascvec(l) = 1.0 / (littleeps+abs( dpb(l-2*p) ));
-      }
-    }    
+  for(l=0;l<p;l++){
+    ascvec(l) = 1.0 / (littleeps+abs(betatilde(l)));
   }
+  for(l=p;l<ppq;l++){
+    l_p = l-p;
+    ascvec(l) = 1.0 / (littleeps+abs( dmb(l_p) ));
+  }
+  for(l=ppq;l<p2q;l++){
+    l_ppq = l-ppq;
+    ascvec(l) = 1.0 / (littleeps+abs( dpb(l_ppq) ));
+  }
+  
   VectorXd mm1 = VectorXd(p);
   VectorXd mm2 = VectorXd(q);
   VectorXd mm3 = VectorXd(q);
@@ -112,7 +117,7 @@ RcppExport SEXP pacs(SEXP R_IOPACSobj){
   MatrixXd D   = MatrixXd(p, p);
   VectorXd db  = VectorXd(p);
   int px2 = p * 2;
-  int it = 0;
+  int it  = 0;
   double crit = 1.0;
   double tmp;
   
