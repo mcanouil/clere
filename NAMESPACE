@@ -1,9 +1,29 @@
 import(Rcpp)
 import(methods)
 import(parallel)
+import(lasso2)
 importFrom("grDevices", "hcl")
 importFrom("graphics", "abline", "legend", "matplot", "par")
 importFrom("stats", "rnorm")
 importFrom("utils", "head", "installed.packages")
 useDynLib(clere)
-exportPattern("^[[:alpha:]]+")
+# exportPattern("^[[:alpha:]]+")
+
+exportMethods(
+    "[",
+    "[<-",
+    "show",
+    "is.clere",
+    "clusters",
+    "predict",
+    "summary",
+    "plot"
+)
+export(
+    "fitPacs",
+    "fitClere"
+)
+exportClasses(
+    "Clere",
+    "sClere"
+)

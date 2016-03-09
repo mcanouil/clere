@@ -497,7 +497,18 @@ setMethod(f = "clusters", signature = "Clere", definition = function(object, thr
     if(is.null(threshold)) {
       return(apply(object@P, 1, which.max))
     }else{
-      return(apply(object@P >= threshold, 1, function(x) ifelse(sum(x)>0,which.max(x),NA)))
+      return(sapply(1:object@p,function(j){
+        counts = sum(object@P[j,]>=threshold)
+        if( counts>0 ){
+          if(counts>1){
+            warning("[Clere:clusters] Variable ",j," could have been assigned to other groups using ",threshold," as threshold.\nYou may consider using a larger threshold or set option \" threshold = NULL\".",call.=TRUE)
+          }
+          return( which.max(object@P[j,])[1] )
+        }else{
+          return(NA)
+        }
+      }))
+      ## return(apply(object@P, 1, function(x) ifelse(sum(x>=threshold)>0,which.max(x),NA)))
     }
 })
 

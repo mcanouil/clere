@@ -19,6 +19,7 @@
   columns are times in seconds measured for fitting each methods. The 28
   column is the seed utilized for generating random numbers in these
   analyses. For more details, please refer the package vignette.
+  The R script used to create this dataset is clere/inst/doc/RealDataExample.R.
 }
 
 \usage{

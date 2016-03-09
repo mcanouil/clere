@@ -19,7 +19,8 @@
   measured for fitting each methods. The 28 column is the seed utilized
   for generating random numbers in these analyses. Each row corresponds
   to a simulated dataset on which all 9 methods were fitted. For more
-  details, please refer to the package vignette. 
+  details, please refer to the package vignette.
+  The R script used to create this dataset is clere/inst/doc/SimulatedDataExample.R.
 }
 
 \usage{

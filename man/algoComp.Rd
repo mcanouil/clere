@@ -15,7 +15,8 @@
   matrix \code{Time} contains execution times for the four methods and
   matrix \code{Liks} the log-likelihood reached by each method. These
   data were used to generate the Table 1. in the package vignette. For more
-  details, please refer to the package vignette. 
+  details, please refer to the package vignette.
+  The R script used to create this dataset is clere/inst/doc/SEM_vs_MCEM_simulations.R.
 }
 
 \usage{
