@@ -13,7 +13,6 @@ exportMethods(
     "[",
     "[<-",
     "show",
-    "is.clere",
     "clusters",
     "predict",
     "summary",

@@ -193,7 +193,7 @@ Our model is defined by the following hierarchical relationships:
   $\mathcal{M}\left(1,\pi_1,\ldots,\pi_g\right)$ the one-order
   multinomial distribution of parameters $\bm
   \pi=\left(\pi_1,\ldots,\pi_g \right)$ such as, $\forall$ $
-  k=1,\ldots,g$ $\pi_k>0$ and $\sum^g_{k=1}{\pi_k}=1$, \textcolor{red}{and $\beta_0$ is a constant term}.}
+  k=1,\ldots,g$ $\pi_k>0$ and $\sum^g_{k=1}{\pi_k}=1$, and $\beta_0$ is a constant term.}
   For an individual $i=1,\ldots,n$, $y_i$ is the response and $x_{ij}$ is an observed value for the $j$-th covariate. $\beta_j$ is the regression
   coefficient associated with the $j$-th covariate ($j=1,\ldots,p$),  {which is assumed to follow a mixture of $g$ Gaussians. The variable $\mathbf{z}_j$ indicates from which mixture component $\beta_j$ is drawn ($z_{jk}=1$ if $\beta_j$ comes from component $k$ of the mixture, $z_{jk}=0$ otherwise).}
   Let's note that model (\ref{eq:clere0}) can be considered as a variable selection-like model by constraining the model parameter $b_1$ to be equal to 0. 
@@ -274,11 +274,11 @@ local maximum of the likelihood.
 
 
 \section{ { Estimation and model selection}}
-\textcolor{red}{In this section, two algorithms for model inference are presented: the Monte-Carlo Expectation
+In this section, two algorithms for model inference are presented: the Monte-Carlo Expectation
 Maximization (MCEM) algorithm and the Stochastic Expectation Maximization (SEM) algorithm.
 The section starts with the initialization strategy common to both algorithms and continues with the
 detailed description of each algorithm. Then, model selection (for choosing g) and variable selection
-are discussed.}
+are discussed.
 \label{sec:algos}
 \subsection{ { Initialization} }
  { 
@@ -509,7 +509,7 @@ also implemented in the package. Examples of calls for the functions presented i
 Several other parameters allow to tune the different numbers of iterations of the estimation algorithm. Generally, higher are these parameters values, better is the quality of the estimation but heavier is the computing time. What we advice is to use the default values, and to graphically check the quality of the estimation with plots as in Figure \ref{fig:plot}: if the values of the model parameters are quite stable for a sufficient large part of the iterations, it is ok. If the stability is not reached sufficiently early before the end of the iterations, higher numbers of iterations should be chosen.\\
 Finally, among the remaining parameters (the complete list can be obtained with \code{help(fitClere)}), two are especially important: \code{parallel} allows to run parallel computations (if compatible with the user's computer) and \code{sparse} allows to impose that one of the regression parameter is equal to 0 and thus to introduce a cluster of not significant explanatory variables.}
 
-\subsection[Companion functions summary(), plot(), clusters() and predict()]{Secondary \textcolor{red}{methods} \code{summary()}, \code{plot()}, \code{clusters()} and \code{predict()}}
+\subsection[Companion functions summary(), plot(), clusters() and predict()]{Secondary methods \code{summary()}, \code{plot()}, \code{clusters()} and \code{predict()}}
 
 The \code{summary()} function prints an overview of the estimated parameters and returns the estimated likelihood and information based model selection criteria (AIC, BIC and ICL). 
 
@@ -524,7 +524,7 @@ The call of function \code{plot()} is similar to the one of function
 %    \caption{\label{fig:plot} Values of the model parameters in view of SEM algorithm iterations. The vertical grey line in each of the four plots, represents the number %\code{nBurn} of iterations discarded before calculating maximum likelihood estimates.}
 %\end{figure}  
 
-The function \code{clusters()}, takes one argument of class \code{Clere} and a \code{threshold} argument. This function assigns each variable to the group which associated conditional probability of membership is larger than the given \code{threshold}. \textcolor{red}{If conditional probabilities of membership are larger than the specified threshold for more than one group, then the group having the largest probability is returned and warning is printed. If moreover, there are ex-aequos on that largest probability then the group with the smallest index is returned}. When \code{threshold = NULL}, the maximum a posteriori (MAP) strategy is used to infer the clusters.
+The function \code{clusters()}, takes one argument of class \code{Clere} and a \code{threshold} argument. This function assigns each variable to the group which associated conditional probability of membership is larger than the given \code{threshold}. If conditional probabilities of membership are larger than the specified threshold for more than one group, then the group having the largest probability is returned and warning is printed. If moreover, there are ex-aequos on that largest probability then the group with the smallest index is returned. When \code{threshold = NULL}, the maximum a posteriori (MAP) strategy is used to infer the clusters.
 
 The \code{predict()} function has two arguments, being a \code{clere} and a design matrix $\bm X_{new}$. Using that new design matrix, the \code{predict()} function returns an approximation of $\mathbb{E}\left[\bm X_{new}\bm \beta|\bm y, \bm X; \hat{\bm \theta}\right]$.
 
@@ -551,10 +551,10 @@ where $a\in\left\{\text{\code{"SEM","MCEM"}}\right\}$ and $\widehat{\theta}_a$ i
 where $\bm y^v$ and $\bm X^v$ are respectively a vector of responses and a design matrix from a validation dataset.
 \item Maximum log-likelihood (ML) reached. This quantity was approximated using 1,000 samples from $p(\bm Z|\bm y;\widehat{\bm \theta})$.
 \end{enumerate}
-Three versions of the MCEM algorithm were proposed for comparison with the SEM algorithm, depending on the number $M$ (or \code{nsamp}) of Gibbs iterations used to approximate the \textit{E step}. That number was varied between 5, 25 and 125. \textcolor{red}{We chose these iterations numbers so as to cover different
+Three versions of the MCEM algorithm were proposed for comparison with the SEM algorithm, depending on the number $M$ (or \code{nsamp}) of Gibbs iterations used to approximate the \textit{E step}. That number was varied between 5, 25 and 125. We chose these iterations numbers so as to cover different
 situations, from a situation in which the number of iterations is too small to a situation in which that
-number seems sufficient to expect having reached the convergence of the simulated Markov chain.}. Those versions were respectively denoted MCEM$_5$, MCEM$_{25}$ and MCEM$_{125}$. The comparison was performed using 200 simulated datasets. \textcolor{red}{In order to consider high-dimensional situations with sizes
-allowing to reproduce multiple simulations in a reasonable time,} each training dataset consisted of $n=25$ individuals and $p=50$ variables. Validation datasets used to calculate MSPE consisted of 1,000 individuals each. All covariates were simulated  independently according to the standard Gaussian distribution:
+number seems sufficient to expect having reached the convergence of the simulated Markov chain. Those versions were respectively denoted MCEM$_5$, MCEM$_{25}$ and MCEM$_{125}$. The comparison was performed using 200 simulated datasets. In order to consider high-dimensional situations with sizes
+allowing to reproduce multiple simulations in a reasonable time, each training dataset consisted of $n=25$ individuals and $p=50$ variables. Validation datasets used to calculate MSPE consisted of 1,000 individuals each. All covariates were simulated  independently according to the standard Gaussian distribution:
 \begin{equation*}
  \forall(i,j)\text{ }x_{ij}\sim\mathcal{N}(0,1)\text{.}
 \end{equation*}
@@ -735,8 +735,8 @@ In this section, we compare our model to standard dimension reduction
   improved when parameter $b_1$ was set to 0. CLERE was also the most
   parsimonous approach with an averaged number of estimated parameters
   equal to 7.7 (6.9 when $b_1=0$). The second best approach was PACS
-  which also led to parsimonous models. \textcolor{red}{The superiority of such methods could be expected since
-in the simulation model the regression coefficients are gathered in three groups.} Variable selection approaches
+  which also led to parsimonous models. The superiority of such methods could be expected since
+in the simulation model the regression coefficients are gathered in three groups. Variable selection approaches
   as whole yielded the largest prediction error in this
   simulation. CLERE, PACS and Spike and Slab had the largest computational times (CT).
   For CLERE and PACS  this loss in CT were compensated by a a strong improvement in
@@ -784,9 +784,9 @@ standard dimension reduction approaches. The number of estimated parameters (df:
   \textbf{flare} respectively. The \code{Prostate} dataset comes from
   a study that examined the correlation between the level of prostate
   specific antigen and a number of clinical measures in $n=97$ men who
-  were about to receive a radical prostatectomy. \textcolor{red}{This dataset is a benchmark dataset used in multiple publications
+  were about to receive a radical prostatectomy. This dataset is a benchmark dataset used in multiple publications
 about high-dimensional regression model, including [\cite{tibshirani1996}] and was chosen
-here in order to illustrate the performances of CLERE in comparaison of the competitor methods.}.  We used the prostate specific antigen
+here in order to illustrate the performances of CLERE in comparaison of the competitor methods.  We used the prostate specific antigen
   (variable \code{lpsa}) as response variable and the $p=8$ other
   measurements as covariates.    
   The \code{eyedata} dataset is extracted from the published study of

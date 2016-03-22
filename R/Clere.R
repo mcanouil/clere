@@ -74,23 +74,6 @@ setClass(
 
 
 ### Constructor ###
-
-
-### Is ###
-setGeneric(name = "is.clere", def = function(object) {standardGeneric("is.clere")})
-setMethod(f = "is.clere", signature = "ANY", definition = function(object) {
-    if (length(object)>1) {
-        return(sapply(object, is.clere))
-    } else {
-        if (class(object) == "Clere") {
-            return(TRUE)
-        } else {
-            return(FALSE)
-        }
-    }
-})
-
-
 ### Show ###
 setMethod(f = "show", signature = "Clere", definition = function(object) {
   showSlot <- function(slot) {

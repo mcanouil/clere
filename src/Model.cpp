@@ -300,7 +300,8 @@ Model::Model(int mp,int mg,int mns){
   this->Lmc.resize(nsample);
   this->P.resize(this->p,this->g);
   this->likelihood = -INFINITY;
-  this->entropy    = 0.0;  
+  this->entropy    = 0.0;
+  this->initialized = false;
 };
 
 void Model::init_basic(bool sparse){
@@ -409,6 +410,7 @@ void Model::init_kmeans(bool sparse){
       }
     }
   }
+  initialized = true;
 };
 
 void Model::updateZ_GibbsRows(IO *io, MatrixXd &xz, VectorXd &e,
@@ -447,7 +449,7 @@ void Model::updateZ_GibbsRows(IO *io, MatrixXd &xz, VectorXd &e,
       bk_new = b(k);
       pdfRow(k) = -exj*(bk_old-bk_new) - 0.5*nxj*(bk_old-bk_new)*(bk_old-bk_new)+log(pi(k))-log(pi(og));
       if( pdfRow(k)>lpmax ){
-	lpmax = pdfRow(k);
+	      lpmax = pdfRow(k);
       }
     }
     norm  = 0.0;
