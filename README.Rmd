@@ -23,11 +23,10 @@ knitr::opts_chunk$set(
 [![CRAN_Download_total](https://cranlogs.r-pkg.org/badges/clere)](https://cran.r-project.org/package=clere)
 <!-- badges: end -->
 
-Implements an empirical Bayes approach for
-simultaneous variable clustering and regression. This version also
-(re)implements in C++ an R script proposed by Howard Bondell that fits
-the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see
-Sharma et al (2013) <DOI:10.1080/15533174.2012.707849>).
+Implements an empirical Bayes approach for simultaneous variable clustering and regression. 
+This version also (re)implements in C++ an R script proposed by Howard Bondell that fits
+the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see Sharma et al (2013) DOI:10.1080/15533174.2012.707849).
+
 
 ## Installation
 
@@ -43,6 +42,7 @@ And the development version from [GitHub](https://github.com/) with:
 # install.packages("remotes")
 remotes::install_github("mcanouil/clere")
 ```
+
 
 ## Example
 
@@ -63,6 +63,7 @@ predict(model, newx = x + 1)
 summary(model)
 ```
 
+
 ## Citing clere
 
 ```{r, echo = FALSE, results = "asis"}
@@ -72,6 +73,7 @@ print(citation("clere"), "html")
 ```{r, echo = FALSE, comment = ""}
 print(citation("clere"), "bibtex")
 ```
+
 
 ## Getting help
 
