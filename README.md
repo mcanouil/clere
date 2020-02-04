@@ -9,6 +9,10 @@
 tag](https://img.shields.io/github/tag/mcanouil/clere.svg?label=latest%20tag&include_prereleases)](https://github.com/mcanouil/clere)
 [![R build
 status](https://github.com/mcanouil/clere/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/clere)
+[![Travis build
+status](https://travis-ci.org/mcanouil/clere.svg?branch=master)](https://travis-ci.org/mcanouil/clere)
+[![Codecov test
+coverage](https://codecov.io/gh/mcanouil/clere/branch/master/graph/badge.svg)](https://codecov.io/gh/mcanouil/clere?branch=master)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version-ago/clere)](https://cran.r-project.org/package=clere)
 [![cran
 checks\_worst](https://cranchecks.info/badges/worst/clere)](https://cran.r-project.org/web/checks/check_results_clere.html)
@@ -57,14 +61,15 @@ plot(model)
 clus <- clusters(model, threshold = NULL)
 
 predict(model, newx = x + 1)
-#>  [1] -1.213815 -1.227946 -1.330441 -1.328878 -1.140979 -1.452013 -1.348810
-#>  [8] -1.456819 -1.279758 -1.556311 -1.172174 -1.295883 -1.386152 -1.470135
-#> [15] -1.418711 -1.379912 -1.640547 -1.230693 -1.318454 -1.609977 -1.282903
-#> [22] -1.532473 -1.484949 -1.692800 -1.404823 -1.366585 -1.226226 -1.265016
-#> [29] -1.417031 -1.205170 -1.442003 -1.491469 -1.489771 -1.554533 -1.181190
-#> [36] -1.407053 -1.304942 -1.338871 -1.232894 -1.329558 -1.258883 -1.560488
-#> [43] -1.487141 -1.400914 -1.319881 -1.330845 -1.328302 -1.422391 -1.433036
-#> [50] -1.573886
+#>  [1]  0.01869908 -0.51924237  0.09681002 -0.69571304 -0.29261147 -0.39128074
+#>  [7] -0.48577246  0.42640283 -1.17298175 -0.56965114 -0.06205174 -1.18620369
+#> [13] -0.37897595 -0.37346914 -0.08370270 -0.99161043  0.20488469 -1.82986210
+#> [19] -1.11430557 -0.95998271  1.00495118 -1.23001210 -0.65275941  0.22298105
+#> [25]  0.26866699 -0.69134314 -0.58516431  0.20749829 -0.88040594 -0.49063995
+#> [31]  0.02763108 -0.59090405  0.36264243 -1.23793245 -0.32925324 -0.21639159
+#> [37] -0.27576181 -1.28530124 -0.79878405 -0.43877212 -0.38992622 -0.85409295
+#> [43] -0.11294205 -1.04414251 -0.42731189 -0.05146815 -1.44178747 -0.64019691
+#> [49] -0.68132106  0.17034849
 
 summary(model)
 #>  -------------------------------
@@ -75,18 +80,18 @@ summary(model)
 #> 
 #>  ---
 #>  Estimated parameters using SEM algorithm are
-#>  intercept = 0.03965
-#>  b         = -0.09245    -0.01122
-#>  pi        = 0.03356 0.96644
-#>  sigma2    = 0.8412
-#>  gamma2    = 5.149e-05
+#>  intercept = -0.314
+#>  b         =  0.01281    -0.35574
+#>  pi        = 0.94835 0.05165
+#>  sigma2    = 0.7462
+#>  gamma2    = 0.0001792
 #> 
 #>  ---
-#>  Log-likelihood =  -76.73 
-#>  Entropy        =  14.095 
-#>  AIC            =  165.46 
-#>  BIC            =  176.93 
-#>  ICL            =  191.03
+#>  Log-likelihood =  -79.13 
+#>  Entropy        =  8.0767 
+#>  AIC            =  170.27 
+#>  BIC            =  181.74 
+#>  ICL            =  189.81
 ```
 
 ## Citing clere
