@@ -41,3 +41,5 @@ Collate:
     'Clere.R'
     'sClere-Class.R'
     'fitPacs.R'
+URL: https://github.com/mcanouil/clere
+BugReports: https://github.com/mcanouil/clere/issues
