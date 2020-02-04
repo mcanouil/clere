@@ -1,7 +1,7 @@
 Type: Package
 Package: clere
 Title: Simultaneous Variables Clustering and Regression
-Version: 1.2.0
+Version: 1.1.4.9000
 Date: 2016-03-18
 Authors@R: 
     c(person(given = "Loic",
@@ -23,15 +23,16 @@ License: GPL-3
 Depends: R (>= 2.10)
 Imports: 
     Rcpp,
-    lasso2,
+    RcppEigen,
     methods,
     parallel,
     stats,
     grDevices,
     graphics,
-    utils,
+    utils
 Suggests:
-  roxygen2
+    roxygen2,
+    lasso2
 LinkingTo: 
     Rcpp,
     RcppEigen
@@ -45,10 +46,10 @@ Collate:
     'fitPacs.R'
     'Pacs-class.R'
     'algoComp-dataset.R'
-    'clere-package.R'
     'numExpRealData-dataset.R'
     'numExpSimData-dataset.R'
+    'clere-package.R'
 URL: https://github.com/mcanouil/clere
 BugReports: https://github.com/mcanouil/clere/issues
-Roxygen: list(markdown = TRUE)
+Roxygen: list(markdown = FALSE)
 RoxygenNote: 7.0.2

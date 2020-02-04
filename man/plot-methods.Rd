@@ -7,10 +7,13 @@
 \alias{plot,Clere-method}
 \alias{plot,Clere,ANY-method}
 \title{plot method}
+\usage{
+\S4method{plot}{Clere}(x, y, ...)
+}
 \arguments{
-\item{x}{\link{Clere}: Output object from \code{\link{fitClere}}.}
+\item{x}{[Clere]: Output object from \code{\link{fitClere}}.}
 
-\item{y}{\link{any}: Unused parameter.}
+\item{y}{[any]: Unused parameter.}
 
 \item{...}{Additional arguments, not to be supplied in this version.}
 }
@@ -20,7 +23,7 @@ the course of the model parameters in view of the iterations of the
 estimation algorithms implemented in \code{\link{fitClere}}.
 }
 \seealso{
-Overview :
+Overview : 
 \code{\link{clere-package}} \cr Classes :
 \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
 \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},

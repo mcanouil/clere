@@ -19,17 +19,15 @@
 #'   \item{object["slotName"]<-value:}{Set \code{value} to the field \code{slotName}.}
 #' }
 #' 
-#' @seealso Overview : 
-#' \code{\link{clere-package}} \cr Classes :
-#' \code{\linkS4class{Clere}}, \code{\linkS4class{Pacs}} \cr Methods :
-#' \code{\link{show}}, \code{\link{plot}}, \code{\link{clusters}},
-#' \code{\link{predict}}, \code{\link{summary}} \cr Functions :
-#' \code{\link{fitClere}}, \code{\link{fitPacs}}
+#' @seealso Overview : \code{\link{clere-package}} \cr 
+#' Classes : \code{\linkS4class{Clere}} \cr 
+#' Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+#' Functions : \code{\link{fitClere}} 
+#' Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 #' 
 #' @keywords Pacs Clere class methods method
-NULL
-
-## CreatePACS object
+#' @export
+#' 
 methods::setClass(
   Class = "Pacs",
   representation = methods::representation(

@@ -6,10 +6,13 @@
 \alias{predict-methods}
 \alias{predict,Clere-method}
 \title{predict method}
+\usage{
+\S4method{predict}{Clere}(object, newx, ...)
+}
 \arguments{
-\item{object}{\link{Clere}: Output object from \code{\link{fitClere}}.}
+\item{object}{[Clere]: Output object from \code{\link{fitClere}}.}
 
-\item{newx}{\link{matrix}: A numeric design matrix.}
+\item{newx}{[matrix]: A numeric design matrix.}
 
 \item{...}{Additional arguments, not to be supplied in this version.}
 }
@@ -19,9 +22,9 @@ design. It returns a vector of predicted values of size equal to the number
 of rows of matrix newx.
 }
 \seealso{
-Overview :
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}} \cr 
+Methods : \code{\link{show}}, \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}
 }
