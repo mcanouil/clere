@@ -53,12 +53,13 @@
 #' 
 #' @return Object of class \code{\linkS4class{Clere}.}
 #' 
-#' @seealso Overview : 
-#' \code{\link{clere-package}} \cr Classes :
-#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
-#' \code{\link{fitPacs}}
+#' @export
+#' 
+#' @seealso Overview : \code{\link{clere-package}} \cr 
+#' Classes : \code{\linkS4class{Clere}} \cr 
+#' Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+#' Functions : \code{\link{fitClere}} 
+#' Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 #' 
 #' @examples
 #' 

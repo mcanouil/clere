@@ -22,25 +22,20 @@
 #' @name clere-package
 #' @aliases clere clere-package
 #' @docType package
-
-#' @seealso Overview : 
-#' \code{\link{clere-package}} \cr Classes :
-#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}} Datasets :
-#' \code{\link{numExpRealData}}, \code{\link{numExpSimData}}
 #' 
-#' @references Yengo L., Jacques J. and Biernacki C. Variable clustering in
-#' high dimensional linear regression, Journal de la Societe Francaise de
-#' Statistique (2013).
+#' @seealso Overview : \code{\link{clere-package}} \cr 
+#' Classes : \code{\linkS4class{Clere}} \cr 
+#' Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+#' Functions : \code{\link{fitClere}} 
+#' Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 #' 
 #' @examples
 #'  
 #'  # Simple example using simulated data
 #'  # to see how to you the main function clere
-#'  # library(clere)
-#'  x     <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
-#'  y     <- rnorm(50)
+#'  library(clere)
+#'  x  <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
+#'  y  <- rnorm(50)
 #'  model <- fitClere(y = y, x = x, g = 2, plotit = FALSE)
 #'  plot(model) 
 #'  clus <- clusters(model, threshold = NULL)

@@ -3,8 +3,10 @@
 ############################## Creation ##############################
 ######################################################################
 
-
 ### Class definition ###
+#' @rdname Clere-class
+#' @export
+#' 
 methods::setClass(
   Class = "sClere",
   representation = methods::representation(
@@ -43,6 +45,16 @@ methods::setClass(
 
 
 ### Show ###
+#' show
+#' 
+#' @name show
+#' @aliases show,sClere-method
+#' @docType methods
+#' 
+#' @rdname Clere-class
+#'
+#' @keywords internal
+#' 
 methods::setMethod(f = "show", signature = "sClere", definition = function(object) {
   nd <- 4
   sep <- "\t"
@@ -94,7 +106,16 @@ methods::setMethod(f = "show", signature = "sClere", definition = function(objec
 })
 
 
-### Getteur ###
+#' Getteur
+#'
+#' @name [
+#' @aliases [,sClere-method [,sClere,ANY,ANY,ANY-method
+#' @docType methods
+#' 
+#' @rdname Clere-class
+#'
+#' @keywords internal
+#' 
 methods::setMethod(f = "[", signature = "sClere", definition = function(x, i, j, drop) {
   switch(EXPR = i,
     "analysis" = {
@@ -256,7 +277,16 @@ methods::setMethod(f = "[", signature = "sClere", definition = function(x, i, j,
 })
 
 
-### Setteur ###
+#' Getteur
+#'
+#' @name [<-
+#' @aliases [<-,sClere-method [<-,sClere,ANY,ANY,ANY-method
+#' @docType methods
+#' 
+#' @rdname Clere-class
+#'
+#' @keywords internal
+#' 
 methods::setMethod(f = "[<-", signature = "sClere", definition = function(x, i, j, value) {
   switch(EXPR = i,
     "analysis" = {

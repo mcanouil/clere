@@ -6,10 +6,13 @@
 \alias{clusters-methods}
 \alias{clusters,Clere-method}
 \title{clusters method}
+\usage{
+clusters(object, threshold = NULL, ...)
+}
 \arguments{
-\item{object}{\link{Clere}: Output object from \code{\link{fitClere}}.}
+\item{object}{[Clere]: Output object from \code{\link{fitClere}}.}
 
-\item{threshold}{\link{numeric}: A numerical \code{threshold > 0.5}. If
+\item{threshold}{[numeric]: A numerical \code{threshold > 0.5}. If
 \code{threshold = NULL} then the each variable is assigned to the cluster
 having the largest associated posterior probability.}
 
@@ -19,9 +22,9 @@ having the largest associated posterior probability.}
 This function makes returns the estimated clustering of variables.
 }
 \seealso{
-Overview :
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}} \cr 
+Methods : \code{\link{show}}, \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}
 }

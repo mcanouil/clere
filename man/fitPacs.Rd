@@ -14,23 +14,23 @@ fitPacs(
 )
 }
 \arguments{
-\item{Y}{\link{numeric}: The vector of observed responses - size \code{n}.}
+\item{Y}{[numeric]: The vector of observed responses - size \code{n}.}
 
-\item{X}{\link{matrix}: The matrix of predictors - size \code{n} rows and
+\item{X}{[matrix]: The matrix of predictors - size \code{n} rows and
 \code{p} columns.}
 
-\item{lambda}{\link{numeric}: A non-negative penalty term that controls
+\item{lambda}{[numeric]: A non-negative penalty term that controls
 simultaneouly clusetering and sparsity.}
 
-\item{betaInput}{\link{numeric}: A vector of initial guess of the model
+\item{betaInput}{[numeric]: A vector of initial guess of the model
 parameters. The authors suggest to use coefficients obtained after fitting a
 ridge regression with the shrinkage parameter selected using AIC criterion.}
 
-\item{epsPACS}{\link{numeric}: A tolerance threshold that control the convergence
+\item{epsPACS}{[numeric]: A tolerance threshold that control the convergence
 of the algorithm. The default value fixed in Bondell's initial script is
 1e-5.}
 
-\item{nItMax}{\link{numeric}: Maximum number of iterations in the algorithm.}
+\item{nItMax}{[numeric]: Maximum number of iterations in the algorithm.}
 }
 \value{
 Object of class \code{\linkS4class{Pacs}} containing all the input
@@ -64,13 +64,11 @@ option \code{type=1} in Bondell's script.
    bInit <- lm(y~scale(x))$coefficients[-1]
    mod   <- fitPacs(Y=y,X=x,lambda=1.25,betaInput=bInit,epsPACS=1e-5,nItMax=1000) 
 
-
 }
 \seealso{
-Overview :
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}}
-\code{\link{fitPacs}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}} \cr 
+Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 }

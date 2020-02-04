@@ -33,12 +33,13 @@
 #' parameters plus parameter \code{a0} the intercept and parameter \code{K} the
 #' dimensionality of the model.
 #' 
-#' @seealso Overview : 
-#' \code{\link{clere-package}} \cr Classes :
-#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
-#' \code{\link{fitPacs}}
+#' @export
+#' 
+#' @seealso Overview : \code{\link{clere-package}} \cr 
+#' Classes : \code{\linkS4class{Clere}} \cr 
+#' Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+#' Functions : \code{\link{fitClere}} 
+#' Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 #' 
 #' @examples
 #' 
@@ -50,7 +51,6 @@
 #'    y     <- as.numeric(10+x%*%Beta+eps)
 #'    bInit <- lm(y~scale(x))$coefficients[-1]
 #'    mod   <- fitPacs(Y=y,X=x,lambda=1.25,betaInput=bInit,epsPACS=1e-5,nItMax=1000) 
-#' 
 #' 
 fitPacs <- function(Y = stats::rnorm(10),
                     X = matrix(stats::rnorm(50), nrow = 10),

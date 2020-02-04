@@ -14,9 +14,9 @@ algorithm (SEM-Gibbs).
 \details{
 \tabular{ll}{ Package: \tab clere\cr Title: \tab CLERE methodology for
 simultaneous variables clustering and regression\cr Version: \tab 1.1.4\cr
-Date: \tab 2016-03-18\cr Author: \tab Loic Yengo \href{mailto:loic.yengo@gmail.com}{loic.yengo@gmail.com}\cr
-Contributor: \tab Mickael Canouil \href{mailto:mickael.canouil@cnrs.fr}{mickael.canouil@cnrs.fr}\cr Maintainer:
-\tab Loic Yengo \href{mailto:loic.yengo@gmail.com}{loic.yengo@gmail.com}\cr License: \tab GPL (>= 3)\cr
+Date: \tab 2016-03-18\cr Author: \tab Loic Yengo <loic.yengo@gmail.com>\cr
+Contributor: \tab Mickael Canouil <mickael.canouil@cnrs.fr>\cr Maintainer:
+\tab Loic Yengo <loic.yengo@gmail.com>\cr License: \tab GPL (>= 3)\cr
 Depends: \tab methods, parallel\cr Imports: \tab Rcpp\cr LinkingTo: \tab
 Rcpp, RcppEigen\cr } The package implements mainly the
 \code{\link{fitClere}} function (an example is given below) for fitting the
@@ -30,9 +30,9 @@ prediction from a new design matrix.
  
  # Simple example using simulated data
  # to see how to you the main function clere
- # library(clere)
- x     <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
- y     <- rnorm(50)
+ library(clere)
+ x  <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
+ y  <- rnorm(50)
  model <- fitClere(y = y, x = x, g = 2, plotit = FALSE)
  plot(model) 
  clus <- clusters(model, threshold = NULL)
@@ -40,16 +40,10 @@ prediction from a new design matrix.
  summary(model)
 
 }
-\references{
-Yengo L., Jacques J. and Biernacki C. Variable clustering in
-high dimensional linear regression, Journal de la Societe Francaise de
-Statistique (2013).
-}
 \seealso{
-Overview :
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}} Datasets :
-\code{\link{numExpRealData}}, \code{\link{numExpSimData}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}} \cr 
+Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 }

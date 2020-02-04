@@ -27,67 +27,67 @@ fitClere(
 )
 }
 \arguments{
-\item{y}{\link{numeric}: The vector of observed responses - size \code{n}.}
+\item{y}{[numeric]: The vector of observed responses - size \code{n}.}
 
-\item{x}{\link{matrix}: The matrix of predictors - size \code{n} rows and
+\item{x}{[matrix]: The matrix of predictors - size \code{n} rows and
 \code{p} columns.}
 
-\item{g}{\link{integer}: Either the number or the maximum of groups for fitting
+\item{g}{[integer]: Either the number or the maximum of groups for fitting
 CLERE. Maximum number of groups is considered when model selection is
 required.}
 
-\item{nItMC}{\link{numeric}: Number of Gibbs iterations to generate the
+\item{nItMC}{[numeric]: Number of Gibbs iterations to generate the
 partitions. After the \code{nBurn} iterations, this number is automatically
 set to \code{1}.}
 
-\item{nItEM}{\link{numeric}: Number of SEM iterations.}
+\item{nItEM}{[numeric]: Number of SEM iterations.}
 
-\item{nBurn}{\link{numeric}: Number of SEM iterations discarded before
+\item{nBurn}{[numeric]: Number of SEM iterations discarded before
 calculating the MLE which is averaged over SEM draws.}
 
-\item{dp}{\link{numeric}: Number of iterations between sampled partitions when
+\item{dp}{[numeric]: Number of iterations between sampled partitions when
 calculating the likelihood at the end of the run.}
 
-\item{nsamp}{\link{numeric}: Number of sampled partitions for calculating the
+\item{nsamp}{[numeric]: Number of sampled partitions for calculating the
 likelihood at the end of the run.}
 
-\item{maxit}{\link{numeric}: An EM algorithm is used inside the SEM to maximize
+\item{maxit}{[numeric]: An EM algorithm is used inside the SEM to maximize
 the complete log-likelihood p(y, Z|theta). \code{maxit} stands as the
 maximum number of EM iterations for the internal EM.}
 
-\item{tol}{\link{numeric}: Maximum increased in complete log-likelihood for the
+\item{tol}{[numeric]: Maximum increased in complete log-likelihood for the
 internal EM (stopping criterion).}
 
-\item{nstart}{\link{integer}: Number of random starting points to be used for
+\item{nstart}{[integer]: Number of random starting points to be used for
 fitting the model.}
 
-\item{parallel}{\link{logical}: Should the estimation from \code{nstart} random
+\item{parallel}{[logical]: Should the estimation from \code{nstart} random
 starting points run in parallel?}
 
-\item{seed}{\link{integer}: An integer given as a seed for random number
+\item{seed}{[integer]: An integer given as a seed for random number
 generation. If set to \code{NULL}, then a random seed is generated between
 \code{1} and \code{1000}.}
 
-\item{plotit}{\link{logical}: Should a summary plot (base plot) be drawn after
+\item{plotit}{[logical]: Should a summary plot (base plot) be drawn after
 the run?}
 
-\item{sparse}{\link{logical}: Should a \code{0} class be imposed to the model?}
+\item{sparse}{[logical]: Should a \code{0} class be imposed to the model?}
 
-\item{analysis}{\link{character}: Which analysis is to be performed. Values are
+\item{analysis}{[character]: Which analysis is to be performed. Values are
 \code{"fit"}, \code{"bic"}, \code{"aic"} and \code{"icl"}.}
 
-\item{algorithm}{\link{character}: The algorithm to be chosen to fit the model.
+\item{algorithm}{[character]: The algorithm to be chosen to fit the model.
 Either the SEM-Gibbs algorithm or the MCEM algorithm. The most efficient
 algorithm being the SEM-Gibbs approach. MCEM is not available for binary
 response.}
 
-\item{theta0}{\link{vector(numeric)}: An initial guess of the model parameters.
+\item{theta0}{[vector(numeric)]: An initial guess of the model parameters.
 When considering g components, the length of \code{theta0} must be
 \code{2*g+3} and \code{theta0} should be filled as intercept, the b_k's (g
 real numbers), the pi_k's (g real numbers summing to 1), sigma^2 and gamma^2
 (two positive numbers).}
 
-\item{Z0}{\link{vector(integer)}: A vector of integers representing an initial
+\item{Z0}{[vector(integer)]: A vector of integers representing an initial
 partition for the variables. For 10 variables and 3 groups \code{Z0} can be
 defined as \ \code{Z0 = c(rep(0, 2), rep(1, 3), rep(2, 5))}.}
 }
@@ -162,10 +162,9 @@ Yv <- predict(object = mod, newx = X)
 
 }
 \seealso{
-Overview :
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}}
-\code{\link{fitPacs}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}} \cr 
+Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 }
