@@ -22,8 +22,8 @@
 }
 
 \usage{
-   fitPacs(Y = rnorm(10), X = matrix(rnorm(50), nrow = 10),
-           lambda=0.5,betaInput=rnorm(10),epsPACS=1e-5,nItMax=1000)
+   fitPacs(Y = stats::rnorm(10), X = matrix(stats::rnorm(50), nrow = 10),
+           lambda=0.5, betaInput=s::rnorm(10), epsPACS=1e-5, nItMax=1000)
 }
 
 \arguments{

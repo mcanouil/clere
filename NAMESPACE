@@ -6,7 +6,7 @@ importFrom("grDevices", "hcl")
 importFrom("graphics", "abline", "legend", "matplot", "par")
 importFrom("stats", "rnorm")
 importFrom("utils", "head", "installed.packages")
-useDynLib(clere)
+useDynLib(clere, .registration = TRUE)
 # exportPattern("^[[:alpha:]]+")
 
 exportMethods(

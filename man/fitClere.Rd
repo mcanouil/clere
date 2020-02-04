@@ -9,11 +9,11 @@
 }
 
 \usage{
-    fitClere(y = rnorm(10), x = matrix(rnorm(50), nrow = 10), 
+    fitClere(y = stats::rnorm(10), x = matrix(stats::rnorm(50), nrow = 10), 
               g = 1, nItMC = 50, nItEM = 1000, nBurn = 200, 
               dp = 5, nsamp = 200, maxit = 500, tol = 0.001,
               nstart=2, parallel = FALSE,seed = NULL, plotit = FALSE, sparse = FALSE, 
-              analysis = "fit",algorithm = "SEM",theta0 = NULL, Z0 = NULL)
+              analysis = "fit", algorithm = "SEM",theta0 = NULL, Z0 = NULL)
 }
 
 \arguments{

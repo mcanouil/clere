@@ -813,7 +813,7 @@ Before presenting the results of the comparison between CLERE and its competitor
 %@
 <<>>=
 library(clere)
-data(Prostate)
+data(Prostate, package = "lasso2")
 y <- Prostate[,"lpsa"]
 x <- as.matrix(Prostate[,-which(colnames(Prostate)=="lpsa")]) 
 @
@@ -1000,7 +1000,7 @@ performances of our estimation algorithm.
   France}
 \email{christophe.biernacki@math.univ-lille1.fr}
 
-\address{Mickael Canouil\\
+\address{Mickaël Canouil\\
   Integrated Genomics and Metabolic Diseases Modeling\\
   CNRS UMR 8199 - Lille Institute of Biology\\
   E.G.I.D - FR3508 European Genomics Institute of Diabetes\\
