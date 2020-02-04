@@ -29,7 +29,9 @@ Imports:
     stats,
     grDevices,
     graphics,
-    utils
+    utils,
+Suggests:
+  roxygen2
 LinkingTo: 
     Rcpp,
     RcppEigen
@@ -38,9 +40,14 @@ Encoding: UTF-8
 NeedsCompilation: yes
 Collate: 
     'fitClere.R'
-    'Clere.R'
-    'sClere-Class.R'
+    'Clere-class.R'
+    'sClere-class.R'
     'fitPacs.R'
+    'Pacs-class.R'
+    'algoComp-dataset.R'
+    'clere-package.R'
+    'numExpRealData-dataset.R'
+    'numExpSimData-dataset.R'
 URL: https://github.com/mcanouil/clere
 BugReports: https://github.com/mcanouil/clere/issues
 Roxygen: list(markdown = TRUE)
