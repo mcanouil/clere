@@ -5,20 +5,6 @@
 #' A model-based approach is proposed and fitted using a Stochastic EM-Gibbs
 #' algorithm (SEM-Gibbs).
 #' 
-#' \tabular{ll}{ Package: \tab clere\cr Title: \tab CLERE methodology for
-#' simultaneous variables clustering and regression\cr Version: \tab 1.1.4\cr
-#' Date: \tab 2016-03-18\cr Author: \tab Loic Yengo <loic.yengo@gmail.com>\cr
-#' Contributor: \tab Mickael Canouil <mickael.canouil@cnrs.fr>\cr Maintainer:
-#' \tab Loic Yengo <loic.yengo@gmail.com>\cr License: \tab GPL (>= 3)\cr
-#' Depends: \tab methods, parallel\cr Imports: \tab Rcpp\cr LinkingTo: \tab
-#' Rcpp, RcppEigen\cr } The package implements mainly the
-#' \code{\link{fitClere}} function (an example is given below) for fitting the
-#' model from a matrix of covariates and a vector of response. The package also
-#' implements a \code{\link{summary}} method and graphical summary
-#' \code{\link{plot}} which represents the course of each parameters at each
-#' step of the SEM-Gibbs and a \code{\link{predict}} method for making
-#' prediction from a new design matrix.
-#' 
 #' @name clere-package
 #' @aliases clere clere-package
 #' @docType package

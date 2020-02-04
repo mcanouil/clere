@@ -59,7 +59,7 @@ methods::setMethod(f = "show", signature = "sClere", definition = function(objec
   nd <- 4
   sep <- "\t"
   cat("\t-------------------------------\n")
-  cat("\t| CLERE | Yengo et al. (2013) |\n")
+  cat("\t| CLERE | Yengo et al. (2016) |\n")
   cat("\t-------------------------------\n\n")
   cat("\tModel object for")
   cat(paste(" ", object@nbVarGroups, "groups of variables"))
