@@ -1,3 +1,126 @@
+#' fitClere function
+#' 
+#' This function runs the CLERE Model. It returns an object of class
+#' \code{\linkS4class{Clere}}. For more details please refer to
+#' \code{\link{clere}}.
+#' 
+#' 
+#' @param y [numeric]: The vector of observed responses - size \code{n}.
+#' @param x [matrix]: The matrix of predictors - size \code{n} rows and
+#' \code{p} columns.
+#' @param g [integer]: Either the number or the maximum of groups for fitting
+#' CLERE. Maximum number of groups is considered when model selection is
+#' required.
+#' @param nItMC [numeric]: Number of Gibbs iterations to generate the
+#' partitions. After the \code{nBurn} iterations, this number is automatically
+#' set to \code{1}.
+#' @param nItEM [numeric]: Number of SEM iterations.
+#' @param nBurn [numeric]: Number of SEM iterations discarded before
+#' calculating the MLE which is averaged over SEM draws.
+#' @param dp [numeric]: Number of iterations between sampled partitions when
+#' calculating the likelihood at the end of the run.
+#' @param nsamp [numeric]: Number of sampled partitions for calculating the
+#' likelihood at the end of the run.
+#' @param maxit [numeric]: An EM algorithm is used inside the SEM to maximize
+#' the complete log-likelihood p(y, Z|theta). \code{maxit} stands as the
+#' maximum number of EM iterations for the internal EM.
+#' @param tol [numeric]: Maximum increased in complete log-likelihood for the
+#' internal EM (stopping criterion).
+#' @param nstart [integer]: Number of random starting points to be used for
+#' fitting the model.
+#' @param parallel [logical]: Should the estimation from \code{nstart} random
+#' starting points run in parallel?
+#' @param seed [integer]: An integer given as a seed for random number
+#' generation. If set to \code{NULL}, then a random seed is generated between
+#' \code{1} and \code{1000}.
+#' @param plotit [logical]: Should a summary plot (base plot) be drawn after
+#' the run?
+#' @param sparse [logical]: Should a \code{0} class be imposed to the model?
+#' @param analysis [character]: Which analysis is to be performed. Values are
+#' \code{"fit"}, \code{"bic"}, \code{"aic"} and \code{"icl"}.
+#' @param algorithm [character]: The algorithm to be chosen to fit the model.
+#' Either the SEM-Gibbs algorithm or the MCEM algorithm. The most efficient
+#' algorithm being the SEM-Gibbs approach. MCEM is not available for binary
+#' response.
+#' @param theta0 [vector(numeric)]: An initial guess of the model parameters.
+#' When considering g components, the length of \code{theta0} must be
+#' \code{2*g+3} and \code{theta0} should be filled as intercept, the b_k's (g
+#' real numbers), the pi_k's (g real numbers summing to 1), sigma^2 and gamma^2
+#' (two positive numbers).
+#' @param Z0 [vector(integer)]: A vector of integers representing an initial
+#' partition for the variables. For 10 variables and 3 groups \code{Z0} can be
+#' defined as \ \code{Z0 = c(rep(0, 2), rep(1, 3), rep(2, 5))}.
+#' 
+#' @return Object of class \code{\linkS4class{Clere}.}
+#' 
+#' @seealso Overview : 
+#' \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+#' \code{\link{fitPacs}}
+#' 
+#' @examples
+#' 
+#' # library(clere)
+#' plotit    <- FALSE
+#' sparse    <- FALSE
+#' nItEM     <- 100
+#' nBurn     <- nItEM / 2
+#' nsamp     <- 100
+#' analysis  <- "fit"
+#' algorithm <- "SEM"
+#' nItMC     <- 1
+#' dp        <- 2
+#' maxit     <- 200
+#' tol       <- 1e-3
+#' 
+#' n         <- 50
+#' p         <- 50
+#' intercept <- 0
+#' sigma     <- 10
+#' gamma     <- 10
+#' rho       <- 0.5
+#' 
+#' g         <- 5 
+#' probs     <- c(0.36, 0.28, 0.20, 0.12, 0.04)
+#' Eff       <- p * probs
+#' a         <- 5
+#' B         <- a**(0:(g-1))-1
+#' Z         <- matrix(0, nrow = p, ncol = g)
+#' imax      <- 0
+#' imin      <- 1
+#' 
+#' for (k in 1:g) {
+#'     imin <- imax+1
+#'     imax <- imax+Eff[k]
+#'     Z[imin:imax, k] <- 1
+#' }
+#' Z <- Z[sample(1:p, p), ]
+#' if (g>1) {
+#'     Beta <- rnorm(p, mean = c(Z%*%B), sd = gamma)
+#' } else {
+#'     Beta <- rnorm(p, mean = B, sd = gamma)
+#' }
+#' 
+#' theta0 <- NULL # c(intercept, B, probs, sigma^2, gamma^2)
+#' Z0     <- NULL # apply(Z, 1, which.max)-1
+#' 
+#' gmax <- 7
+#' 
+#' ## Prediction
+#' eps  <- rnorm(n, mean = 0, sd = sigma)
+#' X    <- matrix(rnorm(n*p), nrow = n, ncol = p)
+#' Y    <- as.numeric(intercept+X%*%Beta+eps)
+#' tt   <- system.time(mod <- fitClere(y = Y, x = X, g = gmax, 
+#'                         analysis = analysis,algorithm = algorithm,
+#'                         plotit = plotit, 
+#'                         sparse = FALSE,nItEM = nItEM, 
+#'                         nBurn = nBurn, nItMC = nItMC, 
+#'                         nsamp = nsamp, theta0 = theta0, Z0 = Z0) )
+#' plot(mod)
+#' Yv <- predict(object = mod, newx = X)
+#' 
 fitClere <- function(
                      y = stats::rnorm(10),
                      x = matrix(stats::rnorm(50), nrow = 10),

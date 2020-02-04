@@ -43,3 +43,5 @@ Collate:
     'fitPacs.R'
 URL: https://github.com/mcanouil/clere
 BugReports: https://github.com/mcanouil/clere/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2

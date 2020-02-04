@@ -3,6 +3,66 @@
 ############################## Creation ##############################
 ######################################################################
 
+#' \code{\linkS4class{Clere}} class
+#' 
+#' This class contains all the input parameters to run CLERE.
+#' 
+#' \describe{
+#'   \item{y}{[numeric]: The vector of observed responses.}
+#'   \item{x}{[matrix]: The matrix of predictors.} 
+#'   \item{n}{[integer]: The sample size or the number of rows in matrix x.} 
+#'   \item{p}{[integer]: The number of variables of the number of columns in matrix x.} 
+#'   \item{g}{[integer]: The number or the maximum number of groups considered. Maximum number of groups stands when model selection is required.} 
+#'   \item{nItMC}{[numeric]: Number of Gibbs iterations to generate the partitions.} 
+#'   \item{nItEM}{[numeric]: Number of SEM/MCEM iterations.} 
+#'   \item{nBurn}{[numeric]: Number of SEM iterations discarded before calculating the MLE which is averaged over SEM draws.}
+#'   \item{dp}{[numeric]: Number of iterations between sampled partitions when calculating the likelihood at the end of the run.} 
+#'   \item{nsamp}{[numeric]: Number of sampled partitions for calculating the likelihood at the end of the run.} 
+#'   \item{sparse}{[logical]: Should a \code{0} class be imposed to the model?} 
+#'   \item{analysis}{[character]: Which analysis is to be performed. Values are \code{"fit"}, \code{"bic"}, \code{"aic"} and \code{"icl"}.} 
+#'   \item{algorithm}{[character]: The algorithmto be chosen to fit the model. Either the SEM-Gibbs algorithm or the MCEM algorithm. The most efficient algorithm being the SEM-Gibbs approach. MCEM is not available for binary response.} 
+#'   \item{initialized}{[logical]: Is set to TRUE when an initial partition and an initial vector of parameters is given by the user.} \item{maxit}{[numeric]: An EM algorithm is used inside the SEM to maximize the complete log-likelihood \code{p(y,Z|theta)}. \code{maxit} stands as the maximum number of EM iterations for the internal EM.} 
+#'   \item{tol}{[numeric]: Maximum increased in complete log-likelihood for the internal EM (stopping criterion).} 
+#'   \item{seed}{[integer]: An integer given as a seed for random number generation. If set to \code{NULL}, then a random seed is generated between \code{1} and \code{1000}.}
+#'   \item{b}{[numeric]: Vector of parameter b. Its size equals the number of group(s).} 
+#'   \item{pi}{[numeric]: Vector of parameter pi. Its size equals the number of group(s).} 
+#'   \item{sigma2}{[numeric]: Parameter sigma^2.}
+#'   \item{gamma2}{[numeric]: Parameter gamma^2.} itemintercept[numeric]: Parameter beta_0 (intercept).
+#'   \item{likelihood}{[numeric]: Approximated log-likelihood.} 
+#'   \item{entropy}{[numeric]: Approximated entropy.}
+#'   \item{P}{[matrix]: A [\code{p x g}] matrix of posterior probability of membership to the groups. \code{P = E[Z|theta]}.} 
+#'   \item{theta}{[matrix]: A [\code{nItEM x (2g+4)}] matrix containing values of the model parameters and complete data likelihood at each iteration of the SEM/MCEM algorithm}
+#'   \item{Bw}{[matrix]: A [\code{p x nsamp}] matrix which columns are samples from the posterior distribution of Beta (regression coefficients) given the data and the maximum likelihood estimates.} 
+#'   \item{Zw}{[matrix]: A [\code{p x nsamp}] matrix which columns are samples from the posterior distribution of Z (groups membership indicators) given the data and the maximum likelihood estimates.} 
+#'   \item{theta0}{[numeric]: A vector size [\code{2g+3}] containing initial guess of the model parameters. See example for function \code{\link{fitClere}.}} 
+#'   \item{Z0}{[numeric]: A [\code{p x 1}] vector of integers taking values between 1 and \code{p} (number of variables).}
+#' }
+#' 
+#' @name Clere-class
+#' @aliases Clere-class [,Clere-method [<-,Clere-method show,Clere-method sClere-class show,sClere-method [,sClere-method [<-,sClere-method
+#' @docType class
+#' 
+#' @section Methods: 
+#' \describe{ 
+#'   \item{object["slotName"]:}{Get the value of the field \code{slotName}.} 
+#'   \item{object["slotName"]<-value:}{Set \code{value} to the field \code{slotName}.} 
+#'   \item{show(object):}{Returns the formatted values of \code{\linkS4class{Clere}} object.} 
+#'   \item{plot(x, ...):}{Graphical summary for MCEM/SEM-Gibbs estimation.} 
+#'   \item{clusters(object, threshold = NULL, ...):}{Returns the estimated clustering of variables.}
+#'   \item{predict(object, newx, ...):}{Returns prediction using a fitted model and a new matrix of design.} 
+#'   \item{summary(object, ...):}{summarizes the output of function \code{\link{fitClere}}.} 
+#' }
+#' 
+#' @seealso Overview : \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}},
+#' \code{\link{fitPacs}} Datasets : \code{\link{numExpRealData}},
+#' \code{\link{numExpSimData}}
+#' 
+#' @keywords Clere class methods method
+NULL
+
 ### Class definition ###
 methods::setClass(
   Class = "Clere",
@@ -487,8 +547,29 @@ methods::setMethod(f = "[", signature = "Clere", definition = function(x, i, j, 
 })
 
 
+#' clusters method
+#' 
+#' This function makes returns the estimated clustering of variables.
+#' 
+#' 
+#' @name clusters
+#' @aliases clusters clusters-methods clusters,Clere-method
+#' @docType methods
+#' 
+#' @param object [Clere]: Output object from \code{\link{fitClere}}.
+#' @param threshold [numeric]: A numerical \code{threshold > 0.5}. If
+#' \code{threshold = NULL} then the each variable is assigned to the cluster
+#' having the largest associated posterior probability.
+#' @param ... Additional arguments, not to be supplied in this version.
+#' 
+#' @seealso Overview : 
+#' \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+#'
+NULL
 
-### Clusters ###
 methods::setGeneric(name = "clusters", def = function(object, threshold = NULL, ...) {
   standardGeneric("clusters")
 })
@@ -512,7 +593,30 @@ methods::setMethod(f = "clusters", signature = "Clere", definition = function(ob
 })
 
 
-### Predict ###
+
+#' predict method
+#' 
+#' This function makes prediction using a fitted model and a new matrix of
+#' design. It returns a vector of predicted values of size equal to the number
+#' of rows of matrix newx.
+#' 
+#' 
+#' @name predict
+#' @aliases predict predict-methods predict,Clere-method
+#' @docType methods
+#' 
+#' @param object [Clere]: Output object from \code{\link{fitClere}}.
+#' @param newx [matrix]: A numeric design matrix.
+#' @param ... Additional arguments, not to be supplied in this version.
+#' 
+#' @seealso Overview : 
+#' \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+#' 
+NULL
+
 setMethod(f = "predict", signature = "Clere", definition = function(object, newx, ...) {
   if (inherits(newx, "matrix")) {
     if (ncol(newx) == object@p) {
@@ -526,7 +630,25 @@ setMethod(f = "predict", signature = "Clere", definition = function(object, newx
 })
 
 
-### Summary ###
+#' summary method
+#' 
+#' This function summarizes the output of function \code{\link{fitClere}}.
+#' 
+#' @name summary
+#' @aliases summary summary-methods summary,Clere-method
+#' @docType methods
+#' 
+#' @param object [Clere]: Output object from \code{\link{fitClere}}.
+#' @param ... Additional arguments, not to be supplied in this version.
+#' 
+#' @seealso Overview : 
+#' \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+#'
+NULL
+
 setMethod(f = "summary", signature = "Clere", definition = function(object, ...) {
   if (missing(object)) {
     stop("[Clere:summary] \"object\" is missing", call. = FALSE)
@@ -555,7 +677,29 @@ setMethod(f = "summary", signature = "Clere", definition = function(object, ...)
 })
 
 
-### Plot ###
+#' plot method
+#' 
+#' Graphical summary for MCEM/SEM-Gibbs estimation.  This function represents
+#' the course of the model parameters in view of the iterations of the
+#' estimation algorithms implemented in \code{\link{fitClere}}.
+#' 
+#' 
+#' @name plot-methods
+#' @aliases plot plot-methods plot,Clere-method plot,Clere,ANY-method
+#' @docType methods
+#' 
+#' @param x [Clere]: Output object from \code{\link{fitClere}}.
+#' @param y [any]: Unused parameter.
+#' @param ... Additional arguments, not to be supplied in this version.
+#' 
+#' @seealso Overview : 
+#' \code{\link{clere-package}} \cr Classes :
+#' \code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
+#' \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
+#' \code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+#' 
+NULL
+
 # setGeneric(name = "plot", def = function(x, ...) {standardGeneric("plot")})
 methods::setMethod(f = "plot", signature = "Clere", definition = function(x, ...) {
   if (nrow(x@theta) >= 2) {
