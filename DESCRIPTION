@@ -20,7 +20,8 @@ Description: Implements an empirical Bayes approach for
     the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see
     Sharma et al (2013) <DOI:10.1080/15533174.2012.707849>).
 License: GPL-3
-Depends: R (>= 2.10)
+Depends: 
+    R (>= 3.2)
 Imports: 
     Rcpp,
     RcppEigen,
@@ -33,7 +34,8 @@ Imports:
 Suggests:
     roxygen2,
     lasso2,
-    knitr
+    knitr,
+    covr
 LinkingTo: 
     Rcpp,
     RcppEigen
