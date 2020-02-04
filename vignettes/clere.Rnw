@@ -750,7 +750,7 @@ The results of this simulation study were made available
   \code{help(numExpSimData)}.
 \begin{figure}[!ht]
 \centerline{
-<<fig=TRUE,echo=FALSE>>=
+<<echo=FALSE>>=
 library(clere)
 data(numExpSimData)
 meths <- c(
@@ -821,7 +821,7 @@ y <- Prostate[, "lpsa"]
 x <- as.matrix(Prostate[, -which(colnames(Prostate) == "lpsa")]) 
 @
 Possible training (\code{xt} and \code{yt}) and validation (\code{xv} and \code{yv}) sets are generated as follows:
-<<>>= 
+<<>>=
 itraining <- 1:(0.8 * nrow(x))
 xt <- x[ itraining, ]
 yt <- y[ itraining]
@@ -840,7 +840,7 @@ summary(mod)
 @
 \begin{figure}[!ht]    
 \centerline{
-<<fig=TRUE,echo=FALSE>>=
+<<echo=FALSE>>=
 plot(mod)
 @
 %\includegraphics[scale=0.8]{images/Figure1.pdf}

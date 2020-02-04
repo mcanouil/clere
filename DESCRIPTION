@@ -32,7 +32,8 @@ Imports:
     utils
 Suggests:
     roxygen2,
-    lasso2
+    lasso2,
+    knitr
 LinkingTo: 
     Rcpp,
     RcppEigen
@@ -53,3 +54,4 @@ URL: https://github.com/mcanouil/clere
 BugReports: https://github.com/mcanouil/clere/issues
 Roxygen: list(markdown = FALSE)
 RoxygenNote: 7.0.2
+VignetteBuilder: knitr

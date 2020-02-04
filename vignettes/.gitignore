@@ -1,2 +1,9 @@
 *.html
 *.R
+*.pdf
+*.tex
+*.gz
+*.bbl
+*.blg
+*.log
+*.brf
