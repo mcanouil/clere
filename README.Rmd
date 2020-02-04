@@ -54,10 +54,12 @@ x <- matrix(rnorm(50 * 100), nrow = 50, ncol = 100)
 y <- rnorm(50)
 
 model <- fitClere(y = y, x = x, g = 2, plotit = FALSE)
+model
 
 plot(model)
 
 clus <- clusters(model, threshold = NULL)
+clus
 
 predict(model, newx = x + 1)
 
