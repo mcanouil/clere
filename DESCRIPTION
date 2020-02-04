@@ -1,0 +1,43 @@
+Type: Package
+Package: clere
+Title: Simultaneous Variables Clustering and Regression
+Version: 1.2.0
+Date: 2016-03-18
+Authors@R: 
+    c(person(given = "Loic",
+             family = "Yengo",
+             role = c("aut", "cre"),
+             email = "loic.yengo@gmail.com"),
+      person(given = "Mickaël",
+             family = "Canouil",
+             role = "aut",
+             email = "mickael.canouil@cnrs.fr",
+             comment = c(ORCID = "0000-0002-3396-4549"))
+    )
+Description: Implements an empirical Bayes approach for
+    simultaneous variable clustering and regression. This version also
+    (re)implements in C++ an R script proposed by Howard Bondell that fits
+    the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see
+    Sharma et al (2013) <DOI:10.1080/15533174.2012.707849>).
+License: GPL-3
+Depends: R (>= 2.10)
+Imports: 
+    Rcpp,
+    lasso2,
+    methods,
+    parallel,
+    stats,
+    grDevices,
+    graphics,
+    utils
+LinkingTo: 
+    Rcpp,
+    RcppEigen
+Copyright: Loic Yengo
+Encoding: UTF-8
+NeedsCompilation: yes
+Collate: 
+    'fitClere.R'
+    'Clere.R'
+    'sClere-Class.R'
+    'fitPacs.R'
