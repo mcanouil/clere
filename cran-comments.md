@@ -15,53 +15,37 @@
 
 ### win-builder (`devtools::check_win_devel()`)
 
-* R-devel: OK
+* R-devel: 
 
 ```
 ```
 
 ### R-hub builder (`rhub::check_for_cran()`)
 
-* Fedora Linux, R-devel, clang, gfortran: WARNING + NOTE
+* Fedora Linux, R-devel, clang, gfortran: 
 
 ```
-> checking re-building of vignette outputs ... WARNING
-    Error(s) in re-building vignettes:
-      ...
-    --- re-building ‘clere.Rnw’ using Sweave
-    Error: processing vignette 'clere.Rnw' failed with diagnostics:
-    Running 'texi2dvi' on 'clere.tex' failed.
-    LaTeX errors:
-    ! LaTeX Error: File `microtype.sty' not found.
-```
-```
-> checking installed package size ... NOTE
-  installed size is 25.0Mb
-  sub-directories of 1Mb or more:
-    libs  23.8Mb
 ```
 
-* Ubuntu Linux 16.04 LTS, R-release, GCC: NOTE
+* Ubuntu Linux 16.04 LTS, R-release, GCC: 
 
 ```
-> checking installed package size ... NOTE
-  installed size is 25.0Mb
-  sub-directories of 1Mb or more:
-    libs  23.8Mb
 ```
 
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit: NOTE
 
 ```
 > checking sizes of PDF files under 'inst/doc' ... NOTE
-    Unable to find GhostScript executable to run checks on size reduction
+Unable to find GhostScript executable to run checks on size reduction
 > checking for non-standard things in the check directory ... NOTE
-    'clere-Ex_i386.Rout' 'clere-Ex_x64.Rout' 'examples_i386' 'examples_x64'
+Found the following files/directories:
+  'examples_x64'  'clere-Ex_i386.Rout' 'clere-Ex_x64.Rout' 'examples_i386'
 ```
 
 ### R-hub builder (`rhub::check_on_macos()`)
 
 * macOS 10.11 El Capitan, R-release: OK
+
 
 ### travis-ci
 
