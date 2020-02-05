@@ -44,6 +44,7 @@ VignetteBuilder:
     knitr
 Copyright: Loic Yengo
 Encoding: UTF-8
+LazyData: true
 NeedsCompilation: yes
 Roxygen: list(markdown = FALSE)
 RoxygenNote: 7.0.2
