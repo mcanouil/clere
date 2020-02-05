@@ -27,7 +27,6 @@ Imports:
     graphics,
     methods,
     parallel,
-    stats,
     utils
 Suggests:
     covr (>= 3.4.0),
