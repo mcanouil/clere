@@ -25,8 +25,7 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 Implements an empirical Bayes approach for simultaneous variable clustering and regression. 
-This version also (re)implements in C++ an R script proposed by Howard Bondell that fits
-the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see Sharma et al (2013) doi: [10.1080/15533174.2012.707849](https://doi.org/10.1080/15533174.2012.707849)).
+This version also (re)implements in C++ an R script proposed by Howard Bondell that fits the Pairwise Absolute Clustering and Sparsity (PACS) methodology (see Sharma et al (2013) doi: [10.1080/15533174.2012.707849](https://doi.org/10.1080/15533174.2012.707849)).
 
 
 ## Installation
