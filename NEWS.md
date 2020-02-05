@@ -2,9 +2,10 @@
 
 ## Minor improvements and fixes
 
-* Now uses roxygen2
+* Manually use roxygen2 to generate documentation
 * Now properly imports packages
-* Fix CRAN checks for `length(class(x))>1`
+* Fix CRAN checks notes, warnings and errors from R-devel
 * Add `README`
 * Add `CITATION`
+* Remove S4 methods `[` and `[<-`
 
