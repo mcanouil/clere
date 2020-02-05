@@ -1,4 +1,4 @@
-# clere (development version)
+# clere 1.2.0
 
 ## Minor improvements and fixes
 
