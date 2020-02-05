@@ -4,14 +4,7 @@
 \alias{fitPacs}
 \title{fitPacs function}
 \usage{
-fitPacs(
-  Y = stats::rnorm(10),
-  X = matrix(stats::rnorm(50), nrow = 10),
-  lambda = 0.5,
-  betaInput = stats::rnorm(10),
-  epsPACS = 1e-05,
-  nItMax = 1000
-)
+fitPacs(Y, X, lambda = 0.5, betaInput, epsPACS = 1e-05, nItMax = 1000)
 }
 \arguments{
 \item{Y}{[numeric]: The vector of observed responses - size \code{n}.}

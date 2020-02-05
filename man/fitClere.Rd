@@ -5,8 +5,8 @@
 \title{fitClere function}
 \usage{
 fitClere(
-  y = stats::rnorm(10),
-  x = matrix(stats::rnorm(50), nrow = 10),
+  y,
+  x,
   g = 1,
   nItMC = 50,
   nItEM = 1000,
