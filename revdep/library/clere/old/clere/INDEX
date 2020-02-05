@@ -1,0 +1,17 @@
+Clere-class             'Clere' class
+Pacs-class              'Pacs' class
+algoComp-dataset        Performances SEM algorithm versus MCEM
+clere-package           CLERE methodology for simultaneous variables
+                        clustering and regression
+clusters                clusters method
+fitClere                fitClere function
+fitPacs                 fitPacs function
+numExpRealData-dataset
+                        Performances of 9 methods for dimension
+                        reduction applied to 2 published real dataset
+numExpSimData-dataset   Performances of 9 methods for dimension
+                        reduction on data simulated under the CLERE
+                        model
+plot-methods            plot method
+predict                 predict method
+summary                 summary method
