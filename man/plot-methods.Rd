@@ -23,9 +23,9 @@ the course of the model parameters in view of the iterations of the
 estimation algorithms implemented in \code{\link{fitClere}}.
 }
 \seealso{
-Overview : 
-\code{\link{clere-package}} \cr Classes :
-\code{\linkS4class{Clere}} \cr Methods : \code{\link{show}},
-\code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}},
-\code{\link{summary}} \cr Functions : \code{\link{fitClere}}
+Overview : \code{\link{clere-package}} \cr 
+Classes : \code{\linkS4class{Clere}}, \code{\linkS4class{Pacs}} \cr 
+Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
+Functions : \code{\link{fitClere}}, \code{\link{fitPacs}} 
+Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 }
