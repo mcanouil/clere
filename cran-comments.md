@@ -16,14 +16,33 @@
 ### win-builder (`devtools::check_win_devel()`)
 
 * R-devel: OK
+
 ```
 ```
 
 ### R-hub builder (`rhub::check_for_cran()`)
 
-* Fedora Linux, R-devel, clang, gfortran: OK
+* Fedora Linux, R-devel, clang, gfortran: WARNING + NOTE
+
+```
+> checking re-building of vignette outputs ... WARNING
+    Error(s) in re-building vignettes:
+      ...
+    --- re-building ‘clere.Rnw’ using Sweave
+    Error: processing vignette 'clere.Rnw' failed with diagnostics:
+    Running 'texi2dvi' on 'clere.tex' failed.
+    LaTeX errors:
+    ! LaTeX Error: File `microtype.sty' not found.
+```
+```
+> checking installed package size ... NOTE
+  installed size is 25.0Mb
+  sub-directories of 1Mb or more:
+    libs  23.8Mb
+```
 
 * Ubuntu Linux 16.04 LTS, R-release, GCC: NOTE
+
 ```
 > checking installed package size ... NOTE
   installed size is 25.0Mb
@@ -32,6 +51,7 @@
 ```
 
 * Windows Server 2008 R2 SP1, R-devel, 32/64 bit: NOTE
+
 ```
 > checking sizes of PDF files under 'inst/doc' ... NOTE
     Unable to find GhostScript executable to run checks on size reduction
@@ -43,16 +63,40 @@
 
 * macOS 10.11 El Capitan, R-release: OK
 
-### R-hub builder (`rhub::check(platform = 'ubuntu-rchk')`)
-
-* ubuntu 10.11 El Capitan, R-release: OK
-
 ### travis-ci
 
-* Ubuntu 16.04.6 LTS, R-devel: OK
+* Ubuntu 16.04.6 LTS, R-devel: NOTE
 
-* Ubuntu 16.04.6 LTS, R-release: OK
+```
+> checking installed package size ... NOTE
+  installed size is 25.0Mb
+  sub-directories of 1Mb or more:
+    libs  23.8Mb
+```
 
-* Ubuntu 16.04.6 LTS, R-3.5: OK
+* Ubuntu 16.04.6 LTS, R-release: NOTE
 
-* Ubuntu 16.04.6 LTS, R-3.6: OK
+```
+> checking installed package size ... NOTE
+  installed size is 25.0Mb
+  sub-directories of 1Mb or more:
+    libs  23.8Mb
+```
+
+* Ubuntu 16.04.6 LTS, R-3.5: NOTE
+
+```
+> checking installed package size ... NOTE
+  installed size is 25.0Mb
+  sub-directories of 1Mb or more:
+    libs  23.8Mb
+```
+
+* Ubuntu 16.04.6 LTS, R-3.6: NOTE
+
+```
+> checking installed package size ... NOTE
+  installed size is 25.0Mb
+  sub-directories of 1Mb or more:
+    libs  23.8Mb
+```

@@ -27,9 +27,9 @@ This class contains all the input parameters to run CLERE.
 
 \seealso{
 Overview : \code{\link{clere-package}} \cr 
-Classes : \code{\linkS4class{Clere}} \cr 
+Classes : \code{\linkS4class{Clere}}, \code{\linkS4class{Pacs}} \cr 
 Methods : \code{\link{plot}}, \code{\link{clusters}}, \code{\link{predict}}, \code{\link{summary}} \cr 
-Functions : \code{\link{fitClere}} 
+Functions : \code{\link{fitClere}}, \code{\link{fitPacs}} 
 Datasets : \code{\link{numExpRealData}}, \code{\link{numExpSimData}}, \code{\link{algoComp}}
 }
 \keyword{Clere}
