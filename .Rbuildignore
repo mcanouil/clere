@@ -11,3 +11,4 @@
 ^\.covrignore$
 ^.cran-checks.R$
 ^revdep$
+^CRAN-RELEASE$
