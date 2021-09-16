@@ -11,6 +11,10 @@ tag](https://img.shields.io/github/tag/mcanouil/clere.svg?label=latest%20tag&inc
 [![cran
 checks\_worst](https://cranchecks.info/badges/worst/clere)](https://cran.r-project.org/web/checks/check_results_clere.html)
 [![CRAN\_Download\_total](https://cranlogs.r-pkg.org/badges/clere)](https://cran.r-project.org/package=clere)
+[![R build
+status](https://github.com/mcanouil/clere/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/clere/actions)
+[![Coverage Status
+(codecov)](https://codecov.io/gh/mcanouil/clere/branch/main/graph/badge.svg)](https://codecov.io/gh/mcanouil/clere)
 <!-- badges: end -->
 
 Implements an empirical Bayes approach for simultaneous variable
