@@ -52,6 +52,7 @@ jobs:
           use-public-rspm: true
           
       - uses: r-lib/actions/setup-tinytex@v1
+        run: tlmgr install tikz.sty
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
