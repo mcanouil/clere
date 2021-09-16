@@ -52,9 +52,7 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-tinytex@v1
-      - run: |
-          Rscript -e 'install.packages("tinytex")'
-          Rscript -e 'tinytex::parse_install(log = "tinytex.log")'
+      - run: tlmgr install tikz.sty
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
