@@ -52,7 +52,9 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-tinytex@v1
-      - run: Rscript -e 'install.packages("tinytex")' -e 'tinytex::parse_packages()'
+      - run: |
+          Rscript -e 'install.packages("tinytex")'
+          Rscript -e 'tinytex::parse_packages()'
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
